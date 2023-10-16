@@ -4,49 +4,55 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_sdk import WebClient
 
-# .envファイルから環境変数を読み込みます
+# Get tokens from environment variables
 load_dotenv()
 
-
-# ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
 app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
 
-# 'hello' を含むメッセージをリッスンします
-# 指定可能なリスナーのメソッド引数の一覧は以下のモジュールドキュメントを参考にしてください：
-# https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
-@app.message("hello")
-def message_hello(message, say):
-    # イベントがトリガーされたチャンネルへ say() でメッセージを送信します
-    # イベントがトリガーされたチャンネルへ say() でメッセージを送信します
-    say(
-        blocks=[
-            {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
-                "accessory": {
-                    "type": "button",
-                    "text": {"type": "plain_text", "text": "Click Me"},
-                    "action_id": "button_click",
-                },
-            }
-        ],
-        text=f"Hey there <@{message['user']}>!",
-    )
-
-
-@app.action("button_click")
-def action_button_click(body, ack, say):
-    # アクションを確認したことを即時で応答します
+@app.command("/morning")
+def handle_morning_command(ack, body, say, command, respond, client: WebClient):
     ack()
-    # チャンネルにメッセージを投稿します
-    say(f"<@{body['user']['id']}> clicked the button")
+    sub_command = command["text"].split(" ")[0]
 
-
-@app.command("/checkin")
-def command_checkin(ack, body, say, respond):
-    ack()
-    say(f"Checkin command received: {body}")
+    if sub_command == "help":
+        say(
+            blocks=[
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "お疲れ様です！\n/morning コマンドの使い方は以下の通りです！\n\n"
+                        + "`/morning commit XX:XX`: 朝活の参加と時間を表明します。\n"
+                        + "`/morning cancel`: 朝活への参加をキャンセルします。\n"
+                        + "`/morning commitments`: 今週の朝活参加者一覧を表示します。\n"
+                        + "`/morning summary`: 今週の朝活の結果を表示します。\n"
+                        + "`/morning leaderboard`: 累計のランキングを表示します。\n"
+                        + "`/morning help`: このヘルプを表示します。\n",
+                    },
+                }
+            ],
+            text="お疲れ様です！\n/morning コマンドの使い方は以下の通りです！",
+        )
+        return
+    elif sub_command == "commit":
+        say(f"<@{body['user_id']}>さんが朝活への参加を表明しました！ *10時00分*")
+        return
+    elif sub_command == "cancel":
+        say(f"<@{body['user_id']}>さんが今週の朝活への参加をキャンセルしました！")
+        return
+    elif sub_command == "commitments":
+        say(f"今週の朝活参加者は以下の通りです！")
+        return
+    elif sub_command == "summary":
+        say(f"今週の結果は以下の通りです！")
+        return
+    else:
+        client.chat_postEphemeral(
+            channel=body["channel_id"],
+            user=body["user_id"],
+            text="コマンドが見つかりませんでした。 `/morning help` でヘルプを表示します。",
+        )
 
 
 @app.message("おはよう")
@@ -62,6 +68,5 @@ def message_hello(message: dict, say, client: WebClient):
     say(f"<@{message['user']}>さん、おはようございます！:sunny: チェックインを記録しました。\n今日も一日頑張っていきましょう！")
 
 
-# アプリを起動します
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
