@@ -65,13 +65,19 @@ async def slack_interactivity(request: Request):
     commit_days_options = answers["commit-days-block"]["commit-days-action"][
         "selected_options"
     ]
+
     commit_days = [option["value"] for option in commit_days_options]
     commit_days_label = [option["text"]["text"] for option in commit_days_options]
     print(commit_days)
 
     slack_client.chat_postMessage(
         channel=channels.TARGET_CHANNEL_ID,
-        blocks=commit_notification.blocks,
+        blocks=commit_notification.blocks(
+            user_id=payload["user"]["id"],
+            commit_hours=hour,
+            commit_minutes=minute,
+            commit_days_labels=commit_days_label,
+        ),
     )
 
     return Response(status_code=200)

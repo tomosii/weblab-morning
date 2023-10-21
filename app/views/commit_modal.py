@@ -13,14 +13,6 @@ modal_view = {
             },
         },
         {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": "数字を直接入力すると細かい時間指定ができます！",
-                "emoji": True,
-            },
-        },
-        {
             "type": "input",
             "block_id": "commit-time-block",
             "element": {
@@ -30,20 +22,20 @@ modal_view = {
             },
             "label": {"type": "plain_text", "text": "今週は何時に設定しますか？"},
         },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "数字を直接入力すると細かい時間指定ができます！",
+                "emoji": True,
+            },
+        },
         {"type": "divider"},
         {
             "type": "header",
             "text": {
                 "type": "plain_text",
                 "text": ":date:  曜日の設定",
-                "emoji": True,
-            },
-        },
-        {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": "お休みの日があればチェックを外してください！",
                 "emoji": True,
             },
         },
@@ -136,6 +128,14 @@ modal_view = {
                         "value": "2023-10-20",
                     },
                 ],
+            },
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "お休みの日があればチェックを外してください！",
+                "emoji": True,
             },
         },
     ],
