@@ -10,9 +10,43 @@ router = APIRouter()
 
 
 @router.post("/slack/events")
-def slack_events(request: Request):
-    # URL verification
-    return request["challenge"]
+async def slack_events(request: Request):
+    if request["type"] == "url_verification":
+        return request["challenge"]
+
+    body = await request.body()
+    event = json.loads(body)["event"]
+
+    if event["type"] == "app_home_opened":
+        print(event)
+
+        # Get channel members
+        members_response = slack_client.conversations_members(
+            channel=channels.TEST_CHANNEL_ID
+        )
+        members = members_response["members"]
+
+        if event["user"] not in members:
+            return Response(status_code=200)
+        else:
+            slack_client.views_publish(
+                user_id=event["user"],
+                view={
+                    "type": "home",
+                    "blocks": [
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "あなたは朝活のメンバーです！",
+                                "emoji": True,
+                            },
+                        }
+                    ],
+                },
+            )
+
+    return Response(status_code=200)
 
 
 @router.post("/slack/morning-command")
