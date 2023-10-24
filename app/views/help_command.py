@@ -50,6 +50,20 @@ blocks = [
                         "elements": [
                             {
                                 "type": "text",
+                                "text": "/morning absent",
+                                "style": {"code": True},
+                            },
+                            {
+                                "type": "text",
+                                "text": ": 朝活を欠席します。",
+                            },
+                        ],
+                    },
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {
+                                "type": "text",
                                 "text": "/morning commitments",
                                 "style": {"code": True},
                             },

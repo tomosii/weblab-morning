@@ -1,3 +1,7 @@
+def text(user_id: str):
+    return f"<@{user_id}> さんが朝活への参加を宣言しました！:fire:"
+
+
 def blocks(
     user_id: str, commit_hours: int, commit_minutes: int, commit_days_labels: list
 ):
@@ -6,7 +10,7 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"<@{user_id}> さんが朝活への参加を宣言しました！",
+                "text": f"<@{user_id}> さんが朝活への参加を宣言しました！:fire:",
             },
         },
         {

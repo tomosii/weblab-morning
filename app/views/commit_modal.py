@@ -1,3 +1,7 @@
+def commit_modal_view(days: list):
+    return {}
+
+
 modal_view = {
     "type": "modal",
     "title": {"type": "plain_text", "text": "朝活の参加表明"},
@@ -23,12 +27,14 @@ modal_view = {
             "label": {"type": "plain_text", "text": "今週は何時に設定しますか？"},
         },
         {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": "数字を直接入力すると細かい時間指定ができます！",
-                "emoji": True,
-            },
+            "type": "context",
+            "elements": [
+                {
+                    "type": "plain_text",
+                    "text": "数字を直接入力すると細かい時間指定ができます！",
+                    "emoji": True,
+                }
+            ],
         },
         {"type": "divider"},
         {
@@ -131,12 +137,17 @@ modal_view = {
             },
         },
         {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": "お休みの日があればチェックを外してください！",
-                "emoji": True,
-            },
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": "この機能はまだ開発中です！:pray:",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": "~お休みの日があればチェックを外してください！~",
+                },
+            ],
         },
     ],
 }
