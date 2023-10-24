@@ -13,6 +13,7 @@ from app.views import (
     absent_notification,
 )
 from app.constants import channels
+from app.utils import weekday
 
 router = APIRouter()
 
@@ -30,9 +31,10 @@ async def slack_morning_command(request: Request):
     print(f"Received morning command from {user_id}: {form['text']}")
 
     if subcommand == "commit":
+        next_activity_dates = weekday.get_next_weekdays()
         response = slack_client.views_open(
             trigger_id=form["trigger_id"],
-            view=commit_modal.modal_view,
+            view=commit_modal.modal_view(next_activity_dates),
         )
         return Response(status_code=200)
 
