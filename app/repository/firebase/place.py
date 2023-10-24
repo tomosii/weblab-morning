@@ -1,5 +1,13 @@
-import firebase_admin
-from firebase_admin import firestore
+from app.repository.firebase.firestore import db
+from app.models.place import Place
 
-firebase_app = firebase_admin.initialize_app()
-db = firestore.client()
+
+class PlaceRepository:
+    def __init__(self):
+        self.collection = db.collection("places")
+
+    def get_places(self):
+        docs = self.collection.stream()
+        places = [Place.from_dict(doc.to_dict()) for doc in docs]
+        print(f"[Firestore] Get {len(places)} places.")
+        return places

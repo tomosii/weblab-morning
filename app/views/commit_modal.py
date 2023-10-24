@@ -8,10 +8,10 @@ def modal_view(activity_dates: list[datetime.date]) -> dict:
         {
             "text": {
                 "type": "plain_text",
-                "text": weekday.get_jp_date_str(date=date, with_day_of_week=False),
+                "text": weekday.get_jp_date_str(date=date, with_day_of_week=True),
                 "emoji": True,
             },
-            "value": str(date),
+            "value": date.strftime("%Y-%m-%d"),
         }
         for date in activity_dates
     ]
@@ -38,7 +38,7 @@ def modal_view(activity_dates: list[datetime.date]) -> dict:
                     "initial_time": "10:00",
                     "action_id": "commit-time-action",
                 },
-                "label": {"type": "plain_text", "text": "今週は何時に設定しますか？"},
+                "label": {"type": "plain_text", "text": "今回は何時に設定しますか？"},
             },
             {
                 "type": "context",
@@ -61,14 +61,14 @@ def modal_view(activity_dates: list[datetime.date]) -> dict:
             },
             {
                 "type": "input",
-                "block_id": "commit-days-block",
+                "block_id": "commit-dates-block",
                 "label": {
                     "type": "plain_text",
                     "text": "どの日に参加しますか？",
                 },
                 "element": {
                     "type": "checkboxes",
-                    "action_id": "commit-days-action",
+                    "action_id": "commit-dates-action",
                     "options": options,
                     "initial_options": options,
                 },
@@ -78,11 +78,7 @@ def modal_view(activity_dates: list[datetime.date]) -> dict:
                 "elements": [
                     {
                         "type": "mrkdwn",
-                        "text": "この機能はまだ開発中です！:pray:",
-                    },
-                    {
-                        "type": "mrkdwn",
-                        "text": "~お休みの日があればチェックを外してください！~",
+                        "text": "お休みの日があればチェックを外してください！",
                     },
                 ],
             },

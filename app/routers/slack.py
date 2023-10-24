@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request, Response
 import json
+import datetime
 
 
 from app.repository.slack import slack_repository
@@ -28,7 +29,7 @@ async def slack_morning_command(request: Request):
     command_text = form["text"]
     subcommand = command_text.split(" ")[0]
 
-    print(f"Received morning command from {user_id}: {form['text']}")
+    print(f"Received morning command from {user_id}: `{form['text']}`.")
 
     if subcommand == "commit":
         next_activity_dates = weekday.get_next_weekdays()
@@ -36,25 +37,35 @@ async def slack_morning_command(request: Request):
             trigger_id=form["trigger_id"],
             view=commit_modal.modal_view(next_activity_dates),
         )
+        print("Sent commit modal.")
         return Response(status_code=200)
 
     elif subcommand == "cancel":
+        next_activity_dates = weekday.get_next_weekdays()
+        commitment_repository.disable_commits(
+            user_id=user_id,
+            dates=next_activity_dates,
+        )
         slack_client.chat_postMessage(
             channel=channels.DEV_CHANNEL_ID,
             blocks=cancel.blocks(
                 user_id=user_id,
+                cancel_dates=next_activity_dates,
             ),
             text=commit_notification.text(
                 user_id=user_id,
             ),
         )
+        print("Sent cancel notification.")
         return Response(status_code=200)
 
     elif subcommand == "absent":
+        absent_date = datetime.date.today() + datetime.timedelta(days=1)
         response = slack_client.views_open(
             trigger_id=form["trigger_id"],
-            view=absent_modal.modal_view,
+            view=absent_modal.modal_view(absent_date),
         )
+        print("Sent absent modal.")
         return Response(status_code=200)
 
     elif subcommand == "commitments":
@@ -86,61 +97,66 @@ async def slack_interactivity(request: Request):
     modal_title = payload["view"]["title"]["text"]
     answers = payload["view"]["state"]["values"]
 
-    print(f"Received submission of {modal_title} from {user_id} ({user_name})")
+    print(f"Received submission of {modal_title} from {user_id} ({user_name}).")
 
     modal_title = payload["view"]["title"]["text"]
     if modal_title == "朝活の参加表明":
         commit_time = answers["commit-time-block"]["commit-time-action"][
             "selected_time"
         ]
-        hour = commit_time.split(":")[0]
-        minute = commit_time.split(":")[1]
-
-        commit_days_options = answers["commit-days-block"]["commit-days-action"][
+        commit_dates_options = answers["commit-dates-block"]["commit-dates-action"][
             "selected_options"
         ]
-
-        commit_days = [option["value"] for option in commit_days_options]
-        commit_days_label = [option["text"]["text"] for option in commit_days_options]
+        commit_dates = [
+            datetime.datetime.strptime(option["value"], "%Y-%m-%d").date()
+            for option in commit_dates_options
+        ]
 
         print(f"Commit time: {commit_time}")
-        print(f"Commit days: {commit_days}")
+        print(f"Commit dates: {commit_dates}")
+
+        commitment_repository.put_commits(
+            user_id=user_id,
+            user_name=user_name,
+            time=commit_time,
+            dates=commit_dates,
+        )
 
         slack_client.chat_postMessage(
             channel=channels.DEV_CHANNEL_ID,
             blocks=commit_notification.blocks(
                 user_id=user_id,
-                commit_hours=hour,
-                commit_minutes=minute,
-                commit_days_labels=commit_days_label,
+                commit_time=commit_time,
+                commit_dates=commit_dates,
             ),
             text=commit_notification.text(
                 user_id=user_id,
             ),
         )
-
-        commitment_repository.puts(
-            user_id=user_id,
-            user_name=user_name,
-            time=commit_time,
-            days=commit_days,
-        )
+        print("Sent commit notification.")
 
         return Response(status_code=200)
 
     elif modal_title == "欠席の連絡":
         absent_reason = answers["absent-reason-block"]["absent-reason-action"]["value"]
+        absent_date = datetime.date.today() + datetime.timedelta(days=1)
+
+        commitment_repository.disable_commit(
+            user_id=user_id,
+            date=absent_date,
+        )
 
         slack_client.chat_postMessage(
             channel=channels.DEV_CHANNEL_ID,
             blocks=absent_notification.blocks(
                 user_id=user_id,
-                reason=absent_reason,
+                absent_reason=absent_reason,
             ),
             text=absent_notification.text(
                 user_id=user_id,
             ),
         )
+        print("Sent absent notification.")
 
         return Response(status_code=200)
 

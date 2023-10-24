@@ -27,16 +27,24 @@ def get_next_weekdays() -> list[datetime.date]:
     today = datetime.date.today()
 
     # Get weekdays of the next week (next Monday to Friday)
-    if today.weekday() == 0:
-        next_monday = today + datetime.timedelta(days=7)
-    else:
-        next_monday = today + datetime.timedelta(days=7 - today.weekday())
+    this_monday = today - datetime.timedelta(days=today.weekday())
+    this_weekdays = []
+    for i in range(5):
+        date = this_monday + datetime.timedelta(days=i)
+        if is_jp_weekday(date):
+            this_weekdays.append(date)
 
+    print("This weekdays:", this_weekdays)
+    if len(this_weekdays) != 0 and today < this_weekdays[0]:
+        return this_weekdays
+
+    # This week has already started, so get weekdays of the next next week
+    next_monday = this_monday + datetime.timedelta(days=7)
     next_weekdays = []
     for i in range(5):
-        day = next_monday + datetime.timedelta(days=i)
-        if is_jp_weekday(day):
-            next_weekdays.append(day)
+        date = next_monday + datetime.timedelta(days=i)
+        if is_jp_weekday(date):
+            next_weekdays.append(date)
     print("Next weekdays:", next_weekdays)
 
     return next_weekdays
