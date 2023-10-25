@@ -126,5 +126,5 @@ async def checkin(checkin_request: CheckInRequest):
     return {
         "place_id": checkin_place.id,
         "place_name": checkin_place.name,
-        "time_differece_seconds": time_diff_seconds,
+        "time_difference_seconds": time_diff_seconds,
     }
