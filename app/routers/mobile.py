@@ -96,7 +96,7 @@ async def checkin(checkin_request: CheckInRequest):
                 detail="Already checked in today.",
             )
     else:
-        print("User has not checked in today yet.")
+        print("User has not checked in yet today.")
 
     time_diff = checkin_at - checkin_at.replace(
         hour=int(user_commit.time.split(":")[0]),
@@ -104,7 +104,12 @@ async def checkin(checkin_request: CheckInRequest):
         second=0,
         microsecond=0,
     )
-    print(f"Time diff: {time_diff}")
+    if time_diff < datetime.timedelta(0):
+        time_diff_seconds = -abs(time_diff).total_seconds()
+    else:
+        time_diff_seconds = time_diff.total_seconds()
+
+    print(f"Time difference: {time_diff_seconds} seconds")
 
     attendance_repository.put_attendance(
         user_id=user.id,
@@ -115,11 +120,11 @@ async def checkin(checkin_request: CheckInRequest):
         latitude=checkin_request.latitude,
         longitude=checkin_request.longitude,
         place_name=checkin_place.name,
-        time_differece=time_diff,
+        time_difference_seconds=time_diff_seconds,
     )
 
     return {
         "place_id": checkin_place.id,
         "place_name": checkin_place.name,
-        "time_differece": str(time_diff),
+        "time_differece_seconds": time_diff_seconds,
     }
