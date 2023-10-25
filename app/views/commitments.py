@@ -11,10 +11,10 @@ def text():
 def blocks(user_commits: list[UserCommitment]):
     blocks = [
         {
-            "type": "section",
+            "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": "朝活参加者は以下の通りです！:placard: ",
+                "text": ":sunglasses: 今回の参戦者たち",
                 "emoji": True,
             },
         },
