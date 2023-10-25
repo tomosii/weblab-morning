@@ -12,6 +12,7 @@ from app.views import (
     commit_notification,
     absent_modal,
     absent_notification,
+    commitments,
 )
 from app.constants import channels
 from app.utils import weekday
@@ -32,7 +33,7 @@ async def slack_morning_command(request: Request):
     print(f"Received morning command from {user_id}: `{form['text']}`.")
 
     if subcommand == "commit":
-        next_activity_dates = weekday.get_next_weekdays()
+        next_activity_dates = weekday.get_next_coming_weekdays()
         response = slack_client.views_open(
             trigger_id=form["trigger_id"],
             view=commit_modal.modal_view(next_activity_dates),
@@ -41,7 +42,7 @@ async def slack_morning_command(request: Request):
         return Response(status_code=200)
 
     elif subcommand == "cancel":
-        next_activity_dates = weekday.get_next_weekdays()
+        next_activity_dates = weekday.get_next_coming_weekdays()
         commitment_repository.disable_commits(
             user_id=user_id,
             dates=next_activity_dates,
@@ -69,7 +70,20 @@ async def slack_morning_command(request: Request):
         return Response(status_code=200)
 
     elif subcommand == "commitments":
-        return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}
+        ongoing_or_coming_activity_dates = weekday.get_ongoing_or_coming_weekdays()
+        user_commits = commitment_repository.get_user_commits(
+            dates=ongoing_or_coming_activity_dates,
+        )
+        slack_client.chat_postMessage(
+            channel=channels.DEV_CHANNEL_ID,
+            blocks=commitments.blocks(
+                user_commits=user_commits,
+            ),
+            text=commitments.text(),
+        )
+        print("Sent commitment list notification.")
+        return Response(status_code=200)
+
     elif subcommand == "summary":
         return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}
     elif subcommand == "leaderboard":
