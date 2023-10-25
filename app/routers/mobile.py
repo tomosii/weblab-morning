@@ -82,6 +82,8 @@ async def checkin(checkin_request: CheckInRequest):
             detail="No commitment found.",
         )
 
+    print(f"Commitment time: {user_commit.time}")
+
     # Check if the user has already checked in today
     attendances = attendance_repository.get_attendances(
         date=checkin_at.date(),
@@ -96,6 +98,14 @@ async def checkin(checkin_request: CheckInRequest):
     else:
         print("User has not checked in today yet.")
 
+    time_diff = checkin_at - checkin_at.replace(
+        hour=int(user_commit.time.split(":")[0]),
+        minute=int(user_commit.time.split(":")[1]),
+        second=0,
+        microsecond=0,
+    )
+    print(f"Time diff: {time_diff}")
+
     attendance_repository.put_attendance(
         user_id=user.id,
         user_name=user.nickname,
@@ -105,9 +115,11 @@ async def checkin(checkin_request: CheckInRequest):
         latitude=checkin_request.latitude,
         longitude=checkin_request.longitude,
         place_name=checkin_place.name,
+        time_differece=time_diff,
     )
 
     return {
         "place_id": checkin_place.id,
         "place_name": checkin_place.name,
+        "time_differece": str(time_diff),
     }

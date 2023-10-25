@@ -26,6 +26,7 @@ class AttendanceRepository:
                 ip_address=data["ipAddress"],
                 lat_lng=data["latLng"],
                 place_name=data["placeName"],
+                time_differece=data["timeDifferece"],
             )
             for data in doc.to_dict().values()
         ]
@@ -43,6 +44,7 @@ class AttendanceRepository:
         latitude: float,
         longitude: float,
         place_name: str,
+        time_differece: datetime.timedelta,
     ):
         doc_ref = self.collection.document(checkin_at.strftime("%Y-%m-%d"))
         doc = doc_ref.get()
@@ -61,6 +63,7 @@ class AttendanceRepository:
                     "ipAddress": ip_address,
                     "latLng": GeoPoint(latitude, longitude),
                     "placeName": place_name,
+                    "timeDifferece": str(time_differece),
                 }
             }
         )
