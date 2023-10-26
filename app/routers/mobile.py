@@ -1,6 +1,6 @@
 import datetime
 
-from fastapi import APIRouter, Request, Response, HTTPException
+from fastapi import APIRouter, HTTPException, Security
 from pydantic import BaseModel
 from geopy.distance import geodesic
 from app.repository.firebase import (
@@ -9,6 +9,7 @@ from app.repository.firebase import (
     attendance_repository,
     commitment_repository,
 )
+from app.auth.api_key import api_key_auth
 
 router = APIRouter()
 
@@ -20,7 +21,7 @@ class CheckInRequest(BaseModel):
     ip_address: str
 
 
-@router.post("/checkin")
+@router.post("/checkin", dependencies=[Security(api_key_auth)])
 async def checkin(checkin_request: CheckInRequest):
     print(f"Received checkin request from {checkin_request.email}")
     print(checkin_request)
