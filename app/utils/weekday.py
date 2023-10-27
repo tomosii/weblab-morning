@@ -1,5 +1,6 @@
 import datetime
 import jpholiday
+from zoneinfo import ZoneInfo
 
 jp_days_of_week = {
     0: "月",
@@ -28,7 +29,7 @@ def get_next_coming_weekdays() -> list[datetime.date]:
     まだ開始されていない開催日を返す
     (commitmentの登録などに使う)
     """
-    today = datetime.date.today()
+    today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
     # Get weekdays of the next week (next Monday to Friday)
     this_monday = today - datetime.timedelta(days=today.weekday())
@@ -60,7 +61,7 @@ def get_ongoing_or_coming_weekdays() -> list[datetime.date]:
     開催中なら開催中の日付を，開催中でなければ次の開催日を返す
     (参加者一覧の確認などに使う)
     """
-    today = datetime.date.today()
+    today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
     # Get weekdays of the next week (next Monday to Friday)
     this_monday = today - datetime.timedelta(days=today.weekday())
@@ -92,7 +93,7 @@ def get_ongoing_or_last_weekdays() -> list[datetime.date]:
     開催中なら開催中の日付を，開催中でなければ前回の開催日を返す
     (結果の確認などに使う)
     """
-    today = datetime.date.today()
+    today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
     # Get weekdays of the next week (next Monday to Friday)
     this_monday = today - datetime.timedelta(days=today.weekday())

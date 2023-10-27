@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Response
 import json
 import datetime
 
-
+from zoneinfo import ZoneInfo
 from app.repository.slack import slack_repository
 from app.repository.firebase import commitment_repository
 from app.views import (
@@ -62,7 +62,8 @@ async def slack_morning_command(request: Request):
         return Response(status_code=200)
 
     elif subcommand == "absent":
-        absent_date = datetime.date.today() + datetime.timedelta(days=1)
+        today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
+        absent_date = today + datetime.timedelta(days=1)
         response = slack_client.views_open(
             trigger_id=form["trigger_id"],
             view=absent_modal.modal_view(absent_date),
@@ -168,7 +169,8 @@ async def slack_interactivity(request: Request):
 
     elif modal_title == "欠席の連絡":
         absent_reason = answers["absent-reason-block"]["absent-reason-action"]["value"]
-        absent_date = datetime.date.today() + datetime.timedelta(days=1)
+        today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
+        absent_date = today + datetime.timedelta(days=1)
 
         commitment_repository.disable_commit(
             user_id=user_id,
