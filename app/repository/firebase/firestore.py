@@ -1,8 +1,9 @@
 import firebase_admin
 import os
 
-# from firebase_admin import firestore
-from google.cloud import firestore
+from firebase_admin import firestore
+
+# from google.cloud import firestore
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,4 +20,4 @@ credentials = firebase_admin.credentials.Certificate(
 )
 
 firebase_app = firebase_admin.initialize_app(credentials)
-db = firestore.Client()
+db = firestore.client()
