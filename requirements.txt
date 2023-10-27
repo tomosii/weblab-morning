@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+firebase-admin
+geopy
+python-dotenv
+jpholiday
