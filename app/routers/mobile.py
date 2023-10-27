@@ -102,7 +102,7 @@ async def checkin(checkin_request: CheckInRequest):
     print("Commitment datetime: ", commit_datetime)
 
     # Check if the user has already checked in today
-    attendances = attendance_repository.get_attendances(
+    attendances = attendance_repository.get_attendance(
         date=checkin_at.date(),
     )
     for attendance in attendances:
@@ -128,6 +128,25 @@ async def checkin(checkin_request: CheckInRequest):
 
     print(f"Time difference: {time_diff_seconds} seconds")
 
+    # Calculate current points this week from attendance
+    ongoing_activity_dates = weekday.get_ongoing_or_last_weekdays()
+    attendances = attendance_repository.get_attendances(
+        dates=ongoing_activity_dates,
+    )
+
+    total_points_before = 0
+    for attendance in attendances:
+        if attendance.user_id == user.id:
+            total_points_before += point.get_point_change(
+                attendance.time_difference_seconds
+            )
+
+    # Calculate point change
+    point_change = point.get_point_change(time_diff_seconds)
+
+    print(f"Total points (before): {total_points_before}")
+    print(f"Point change: {point_change}")
+
     attendance_repository.put_attendance(
         user_id=user.id,
         user_name=user.nickname,
@@ -140,23 +159,6 @@ async def checkin(checkin_request: CheckInRequest):
         time_difference_seconds=time_diff_seconds,
     )
 
-    # Calculate current points this week from attendance
-    ongoing_activity_dates = weekday.get_ongoing_or_last_weekdays()
-    attendances = attendance_repository.get_attendances(
-        dates=ongoing_activity_dates,
-    )
-
-    total_points = 0
-    for attendance in attendances:
-        if attendance.user_id == user.id:
-            total_points += point.get_point_change(attendance.time_difference_seconds)
-
-    # Calculate point change
-    point_change = point.get_point_change(time_diff_seconds)
-
-    print(f"Total points: {total_points}")
-    print(f"Point change: {point_change}")
-
     slack_client.chat_postMessage(
         channel=TARGET_CHANNEL_ID,
         blocks=checkin_notification.blocks(
@@ -164,7 +166,7 @@ async def checkin(checkin_request: CheckInRequest):
             place_name=checkin_place.name,
             checkin_at=checkin_at,
             time_difference_seconds=time_diff_seconds,
-            total_points=total_points,
+            total_points=total_points_before + point_change,
             point_change=point_change,
         ),
         text=checkin_notification.text(
