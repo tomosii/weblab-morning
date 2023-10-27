@@ -33,4 +33,11 @@ def blocks(
                 }
             ],
         },
+        {
+            "type": "section",
+            "fields": [
+                {"type": "mrkdwn", "text": ":candy: `*+1pt*`"},
+                {"type": "mrkdwn", "text": ":star: 合計 *4pt*"},
+            ],
+        },
     ]
