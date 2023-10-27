@@ -3,6 +3,7 @@ import datetime
 from fastapi import APIRouter, HTTPException, Security
 from pydantic import BaseModel
 from geopy.distance import geodesic
+from zoneinfo import ZoneInfo
 from app.repository.firebase import (
     place_repository,
     user_repository,
@@ -26,7 +27,7 @@ async def checkin(checkin_request: CheckInRequest):
     print(f"Received checkin request from {checkin_request.email}")
     print(checkin_request)
 
-    checkin_at = datetime.datetime.now()
+    checkin_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
 
     user = user_repository.get_user(checkin_request.email)
     if user is None:
