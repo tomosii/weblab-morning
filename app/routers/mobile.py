@@ -11,8 +11,13 @@ from app.repository.firebase import (
     commitment_repository,
 )
 from app.auth.api_key import api_key_auth
+from app.views import checkin_notification
+from app.repository.slack import slack_repository
+from app.constants import TARGET_CHANNEL_ID
 
 router = APIRouter()
+
+slack_client = slack_repository.client
 
 
 class CheckInRequest(BaseModel):
@@ -133,6 +138,19 @@ async def checkin(checkin_request: CheckInRequest):
         place_name=checkin_place.name,
         time_difference_seconds=time_diff_seconds,
     )
+
+    slack_client.chat_postMessage(
+        channel=TARGET_CHANNEL_ID,
+        blocks=checkin_notification.blocks(
+            user_id=user.id,
+            place_name=checkin_place.name,
+            checkin_at=checkin_at,
+        ),
+        text=checkin_notification.text(
+            user_id=user.id,
+        ),
+    )
+    print("Sent checkin notification.")
 
     return {
         "place_id": checkin_place.id,

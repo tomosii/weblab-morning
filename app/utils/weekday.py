@@ -124,4 +124,4 @@ def get_jp_day_of_week(date: datetime.date) -> str:
 
 
 if __name__ == "__main__":
-    get_next_weekdays()
+    pass
