@@ -145,6 +145,7 @@ async def checkin(checkin_request: CheckInRequest):
             user_id=user.id,
             place_name=checkin_place.name,
             checkin_at=checkin_at,
+            time_difference_seconds=time_diff_seconds,
         ),
         text=checkin_notification.text(
             user_id=user.id,
