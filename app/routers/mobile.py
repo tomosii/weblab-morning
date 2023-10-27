@@ -14,6 +14,7 @@ from app.auth.api_key import api_key_auth
 from app.views import checkin_notification
 from app.repository.slack import slack_repository
 from app.constants import TARGET_CHANNEL_ID
+from app.utils import weekday, point
 
 router = APIRouter()
 
@@ -139,6 +140,23 @@ async def checkin(checkin_request: CheckInRequest):
         time_difference_seconds=time_diff_seconds,
     )
 
+    # Calculate current points this week from attendance
+    ongoing_activity_dates = weekday.get_ongoing_or_last_weekdays()
+    attendances = attendance_repository.get_attendances(
+        dates=ongoing_activity_dates,
+    )
+
+    total_points = 0
+    for attendance in attendances:
+        if attendance.user_id == user.id:
+            total_points += point.get_point_change(attendance.time_difference_seconds)
+
+    # Calculate point change
+    point_change = point.get_point_change(time_diff_seconds)
+
+    print(f"Total points: {total_points}")
+    print(f"Point change: {point_change}")
+
     slack_client.chat_postMessage(
         channel=TARGET_CHANNEL_ID,
         blocks=checkin_notification.blocks(
@@ -146,6 +164,8 @@ async def checkin(checkin_request: CheckInRequest):
             place_name=checkin_place.name,
             checkin_at=checkin_at,
             time_difference_seconds=time_diff_seconds,
+            total_points=total_points,
+            point_change=point_change,
         ),
         text=checkin_notification.text(
             user_id=user.id,

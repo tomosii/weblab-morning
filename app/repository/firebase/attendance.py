@@ -9,7 +9,7 @@ class AttendanceRepository:
     def __init__(self):
         self.collection = db.collection("attendances")
 
-    def get_attendances(self, date: datetime.date) -> list[Attendance]:
+    def get_attendance(self, date: datetime.date) -> list[Attendance]:
         doc_ref = self.collection.document(date.strftime("%Y-%m-%d"))
         doc = doc_ref.get()
 
@@ -32,6 +32,12 @@ class AttendanceRepository:
         ]
 
         print(f"[Firestore] Get {len(attendances)} attendances of {date}")
+        return attendances
+
+    def get_attendances(self, dates: list[datetime.date]) -> list[Attendance]:
+        attendances = []
+        for date in dates:
+            attendances.extend(self.get_attendance(date))
         return attendances
 
     def put_attendance(

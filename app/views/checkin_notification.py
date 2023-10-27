@@ -12,9 +12,13 @@ def blocks(
     place_name: str,
     checkin_at: datetime.datetime,
     time_difference_seconds: int,
+    total_points: int,
+    point_change: int,
 ) -> list[dict]:
     checkin_time_text = checkin_at.strftime("%H:%M")
     time_diff_text = get_time_difference_str(time_difference_seconds)
+
+    point_change_text = f"+{point_change}" if point_change > 0 else str(point_change)
 
     return [
         {
@@ -36,8 +40,14 @@ def blocks(
         {
             "type": "section",
             "fields": [
-                {"type": "mrkdwn", "text": ":candy: `*+1pt*`"},
-                {"type": "mrkdwn", "text": ":star: 合計 *4pt*"},
+                {
+                    "type": "mrkdwn",
+                    "text": f":candy: *`{point_change_text}pt`*",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": f":star: 合計 *{total_points}pt*",
+                },
             ],
         },
     ]
