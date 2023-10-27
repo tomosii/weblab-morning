@@ -1,6 +1,6 @@
-def get_time_difference_str(seconds: int):
+def get_time_difference_str(seconds: float):
     text = ""
-    abs_seconds = abs(seconds)
+    abs_seconds = int(abs(seconds))
 
     hour = abs_seconds // 3600
     minute = (abs_seconds % 3600) // 60
