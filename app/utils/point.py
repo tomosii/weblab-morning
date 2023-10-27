@@ -5,3 +5,4 @@ def get_point_change(time_difference_seconds: float):
     else:
         points = 1
     print(f"Points: {points}")
+    return points
