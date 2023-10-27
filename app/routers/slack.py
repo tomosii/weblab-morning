@@ -15,7 +15,7 @@ from app.views import (
     commitments,
     summary,
 )
-from app.constants import channels
+from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
 
 router = APIRouter()
@@ -49,7 +49,7 @@ async def slack_morning_command(request: Request):
             dates=next_activity_dates,
         )
         slack_client.chat_postMessage(
-            channel=channels.DEV_CHANNEL_ID,
+            channel=TARGET_CHANNEL_ID,
             blocks=cancel.blocks(
                 user_id=user_id,
                 cancel_dates=next_activity_dates,
@@ -76,7 +76,7 @@ async def slack_morning_command(request: Request):
             dates=ongoing_or_coming_activity_dates,
         )
         slack_client.chat_postMessage(
-            channel=channels.DEV_CHANNEL_ID,
+            channel=TARGET_CHANNEL_ID,
             blocks=commitments.blocks(
                 user_commits=user_commits,
             ),
@@ -91,7 +91,7 @@ async def slack_morning_command(request: Request):
             dates=ongoing_or_last_activity_dates,
         )
         slack_client.chat_postMessage(
-            channel=channels.DEV_CHANNEL_ID,
+            channel=TARGET_CHANNEL_ID,
             blocks=summary.blocks(
                 winner_id="",
                 user_points=[],
@@ -152,7 +152,7 @@ async def slack_interactivity(request: Request):
         )
 
         slack_client.chat_postMessage(
-            channel=channels.DEV_CHANNEL_ID,
+            channel=TARGET_CHANNEL_ID,
             blocks=commit_notification.blocks(
                 user_id=user_id,
                 commit_time=commit_time,
@@ -176,7 +176,7 @@ async def slack_interactivity(request: Request):
         )
 
         slack_client.chat_postMessage(
-            channel=channels.DEV_CHANNEL_ID,
+            channel=TARGET_CHANNEL_ID,
             blocks=absent_notification.blocks(
                 user_id=user_id,
                 absent_reason=absent_reason,
@@ -204,7 +204,7 @@ async def slack_events(request: Request):
 
         # Get channel members
         members_response = slack_client.conversations_members(
-            channel=channels.DEV_CHANNEL_ID
+            channel=TARGET_CHANNEL_ID,
         )
         members = members_response["members"]
 
