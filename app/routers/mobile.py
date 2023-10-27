@@ -28,6 +28,7 @@ async def checkin(checkin_request: CheckInRequest):
     print(checkin_request)
 
     checkin_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+    print("Current time: ", checkin_at)
 
     user = user_repository.get_user(checkin_request.email)
     if user is None:
@@ -84,7 +85,15 @@ async def checkin(checkin_request: CheckInRequest):
             detail="No commitment found.",
         )
 
+    commit_datetime = datetime.datetime.replace(
+        checkin_at,
+        hour=int(user_commit.time.split(":")[0]),
+        minute=int(user_commit.time.split(":")[1]),
+        second=0,
+        microsecond=0,
+    )
     print(f"Commitment time: {user_commit.time}")
+    print("Commitment datetime: ", commit_datetime)
 
     # Check if the user has already checked in today
     attendances = attendance_repository.get_attendances(
@@ -107,7 +116,7 @@ async def checkin(checkin_request: CheckInRequest):
         microsecond=0,
     )
     if time_diff < datetime.timedelta(0):
-        time_diff_seconds = -abs(time_diff).total_seconds()
+        time_diff_seconds = -(abs(time_diff).total_seconds())
     else:
         time_diff_seconds = time_diff.total_seconds()
 
