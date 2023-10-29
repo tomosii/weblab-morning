@@ -37,6 +37,7 @@ async def checkin(checkin_request: CheckInRequest):
     checkin_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     print("Current time: ", checkin_at)
 
+    # ユーザー情報を取得
     user = user_repository.get_user(checkin_request.email)
     if user is None:
         print(f"User not found: {checkin_request.email}")
@@ -45,42 +46,10 @@ async def checkin(checkin_request: CheckInRequest):
             detail="User not found.",
         )
 
-    places = place_repository.get_places()
-
-    checkin_place = None
-    for place in places:
-        for place_ip in place.ip_addresses:
-            if place_ip in checkin_request.ip_address:
-                print(f"IP address matched with {place.name}.")
-                checkin_place = place
-                break
-
-    if checkin_place is None:
-        print("IP address not matched with any place.")
-        raise HTTPException(
-            status_code=400,
-            detail="IP address not matched with any place.",
-        )
-
-    distaces = geodesic(
-        (checkin_request.latitude, checkin_request.longitude),
-        (checkin_place.lat_lng.latitude, checkin_place.lat_lng.longitude),
-    ).meters
-
-    print(f"Distance: {distaces}")
-    if distaces > 30:
-        print("Distance is too far.")
-        raise HTTPException(
-            status_code=400,
-            detail="Out of range of the check-in area.",
-        )
-
-    # Get today's commitments
+    # 本日が参加日かどうかを確認
     commits = commitment_repository.get_commit(
         date=checkin_at.date(),
     )
-
-    # Check if the user has committed today
     for commit in commits:
         if commit.user_id == user.id:
             user_commit = commit
@@ -91,18 +60,9 @@ async def checkin(checkin_request: CheckInRequest):
             status_code=400,
             detail="User doesn't have a commitment today.",
         )
-
-    commit_datetime = datetime.datetime.replace(
-        checkin_at,
-        hour=int(user_commit.time.split(":")[0]),
-        minute=int(user_commit.time.split(":")[1]),
-        second=0,
-        microsecond=0,
-    )
     print(f"Commitment time: {user_commit.time}")
-    print("Commitment datetime: ", commit_datetime)
 
-    # Check if the user has already checked in today
+    # 今日すでにチェックインしているかどうかを確認
     attendances = attendance_repository.get_attendance(
         date=checkin_at.date(),
     )
@@ -116,6 +76,39 @@ async def checkin(checkin_request: CheckInRequest):
     else:
         print("User has not checked in yet today.")
 
+    # ----- チェックイン場所の判定 -----
+    # 場所一覧を取得
+    places = place_repository.get_places()
+
+    # IPアドレスの一致
+    checkin_place = None
+    for place in places:
+        for place_ip in place.ip_addresses:
+            if place_ip in checkin_request.ip_address:
+                print(f"IP address matched with {place.name}.")
+                checkin_place = place
+                break
+    if checkin_place is None:
+        print("IP address not matched with any place.")
+        raise HTTPException(
+            status_code=400,
+            detail="IP address not matched with any place.",
+        )
+
+    # IPアドレスから判定した場所との距離を計算
+    distaces = geodesic(
+        (checkin_request.latitude, checkin_request.longitude),
+        (checkin_place.lat_lng.latitude, checkin_place.lat_lng.longitude),
+    ).meters
+    print(f"Distance: {distaces}")
+    if distaces > 30:
+        print("Distance is too far.")
+        raise HTTPException(
+            status_code=400,
+            detail="Out of range of the check-in area.",
+        )
+
+    # 時間差からポイントを計算
     time_diff_seconds = time_difference.get_time_difference_seconds(
         commit_time=user_commit.time,
         checkin_at=checkin_at,
@@ -124,6 +117,7 @@ async def checkin(checkin_request: CheckInRequest):
     today_point_change = point.get_point_change(time_diff_seconds)
     print(f"Point change: {today_point_change}")
 
+    # チェックイン情報を書き込み
     attendance_repository.put_attendance(
         user_id=user.id,
         user_name=user.nickname,
@@ -136,20 +130,19 @@ async def checkin(checkin_request: CheckInRequest):
         time_difference_seconds=time_diff_seconds,
     )
 
-    # Calculate total points this week from attendance
+    # 今週のチェックイン情報を取得して合計ポイントを計算
     ongoing_activity_dates = weekday.get_ongoing_or_last_weekdays()
     attendances = attendance_repository.get_attendances(
         dates=ongoing_activity_dates,
     )
-
     tota_points, penalty = point.get_total_points_and_penalty(
         user_id=user.id,
         attendances=attendances,
     )
-
     print(f"Total points: {tota_points}")
     print(f"Total penalty: {penalty}")
 
+    # チェックイン通知を送信
     slack_client.chat_postMessage(
         channel=TARGET_CHANNEL_ID,
         blocks=checkin_notification.blocks(
@@ -166,7 +159,7 @@ async def checkin(checkin_request: CheckInRequest):
     )
     print("Sent checkin notification.")
 
-    # Update user's point
+    # ポイント情報を書き込み
     point_repository.put_point(
         start_date=ongoing_activity_dates[0],
         user_id=user.id,
@@ -175,6 +168,7 @@ async def checkin(checkin_request: CheckInRequest):
         penalty=penalty,
     )
 
+    # API呼び出し元に結果を返す
     return {
         "place_id": checkin_place.id,
         "place_name": checkin_place.name,
