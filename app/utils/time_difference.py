@@ -1,3 +1,6 @@
+import datetime
+
+
 def get_time_difference_str(seconds: float):
     text = ""
     abs_seconds = int(abs(seconds))
@@ -19,3 +22,18 @@ def get_time_difference_str(seconds: float):
         text = "+" + text
 
     return text
+
+
+def get_time_difference_seconds(commit_time: str, checkin_at: datetime.datetime):
+    time_diff = checkin_at - checkin_at.replace(
+        hour=int(commit_time.split(":")[0]),
+        minute=int(commit_time.split(":")[1]),
+        second=0,
+        microsecond=0,
+    )
+    if time_diff < datetime.timedelta(0):
+        time_diff_seconds = -(abs(time_diff).total_seconds())
+    else:
+        time_diff_seconds = time_diff.total_seconds()
+
+    return time_diff_seconds

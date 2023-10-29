@@ -69,7 +69,7 @@ blocks = [
                             },
                             {
                                 "type": "text",
-                                "text": ": 朝活参加者一覧を表示します。",
+                                "text": ": 参加者一覧を表示します。",
                             },
                         ],
                     },
@@ -78,12 +78,12 @@ blocks = [
                         "elements": [
                             {
                                 "type": "text",
-                                "text": "/morning summary",
+                                "text": "/morning status",
                                 "style": {"code": True},
                             },
                             {
                                 "type": "text",
-                                "text": ": 朝活の結果を表示します。",
+                                "text": ": 現在の得点状況を表示します。",
                             },
                         ],
                     },

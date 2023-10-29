@@ -31,20 +31,20 @@ def get_next_coming_weekdays() -> list[datetime.date]:
     """
     today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
-    # Get weekdays of the next week (next Monday to Friday)
+    # 今週の月曜日から金曜日のうち、平日の日付を取得
     this_monday = today - datetime.timedelta(days=today.weekday())
     this_weekdays = []
     for i in range(5):
         date = this_monday + datetime.timedelta(days=i)
         if is_jp_weekday(date):
             this_weekdays.append(date)
-
     print("This weekdays:", this_weekdays)
-    # 今日が開催初日より前か確認（まだ開催前か or もう開催中か）
+
+    # 今週の開催がまだ始まっていなければ、今週の開催日を返す
     if len(this_weekdays) != 0 and today < this_weekdays[0]:
         return this_weekdays
 
-    # This week has already started, so get weekdays of the next next week
+    # 今週の開催が始まっている場合は、次回の開催日を返す
     next_monday = this_monday + datetime.timedelta(days=7)
     next_weekdays = []
     for i in range(5):
@@ -63,21 +63,20 @@ def get_ongoing_or_coming_weekdays() -> list[datetime.date]:
     """
     today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
-    # Get weekdays of the next week (next Monday to Friday)
+    # 今週の月曜日から金曜日のうち、平日の日付を取得
     this_monday = today - datetime.timedelta(days=today.weekday())
     this_weekdays = []
     for i in range(5):
         date = this_monday + datetime.timedelta(days=i)
         if is_jp_weekday(date):
             this_weekdays.append(date)
-
     print("This weekdays:", this_weekdays)
 
-    # 今日が開催最終日より前か確認（まだ開催中か or もう終了後か）
-    if len(this_weekdays) != 0 and today < this_weekdays[-1]:
+    # 今週の開催がまだ終わっていなければ、今週の開催日を返す
+    if len(this_weekdays) != 0 and today <= this_weekdays[-1]:
         return this_weekdays
 
-    # This week has already ended, so get weekdays of the next next week
+    # 今週の開催が終わっている場合は、次回の開催日を返す
     next_monday = this_monday + datetime.timedelta(days=7)
     next_weekdays = []
     for i in range(5):
@@ -95,20 +94,20 @@ def get_ongoing_or_last_weekdays() -> list[datetime.date]:
     """
     today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
-    # Get weekdays of the next week (next Monday to Friday)
+    # 今週の月曜日から金曜日のうち、平日の日付を取得
     this_monday = today - datetime.timedelta(days=today.weekday())
     this_weekdays = []
     for i in range(5):
         date = this_monday + datetime.timedelta(days=i)
         if is_jp_weekday(date):
             this_weekdays.append(date)
-
     print("This weekdays:", this_weekdays)
-    # 今日が開催初日より前か確認（もう開催中か or まだ開催前か）
-    if len(this_weekdays) != 0 and today < this_weekdays[0]:
+
+    # 今週の開催がもう始まっていれば、今週の開催日を返す
+    if len(this_weekdays) != 0 and this_weekdays[0] <= today:
         return this_weekdays
 
-    # This week has not started yet, so get weekdays of the last week
+    # まだ開催されていない場合は、前回の開催日を返す
     last_monday = this_monday - datetime.timedelta(days=7)
     last_weekdays = []
     for i in range(5):
