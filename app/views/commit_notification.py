@@ -22,7 +22,7 @@ def blocks(user_id: str, commit_time: str, commit_dates: list[datetime.date]):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"<@{user_id}> さんが朝活の参加を宣言しました！:fire:",
+                "text": f"<@{user_id}> さんが朝活参加を宣言しました :fire:",
             },
         },
         {

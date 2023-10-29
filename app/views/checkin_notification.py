@@ -25,7 +25,7 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"<@{user_id}> さんがチェックインしました！:sunny:",
+                "text": f"<@{user_id}> さんがチェックインしました :sunny:",
             },
         },
         {
@@ -46,7 +46,7 @@ def blocks(
                 },
                 {
                     "type": "mrkdwn",
-                    "text": f":star: 合計 *{total_points}pt*",
+                    "text": f":star: 今週の合計 *{total_points}pt*",
                 },
             ],
         },

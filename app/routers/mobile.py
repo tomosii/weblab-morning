@@ -9,12 +9,13 @@ from app.repository.firebase import (
     user_repository,
     attendance_repository,
     commitment_repository,
+    point_repository,
 )
 from app.auth.api_key import api_key_auth
 from app.views import checkin_notification
 from app.repository.slack import slack_repository
 from app.constants import TARGET_CHANNEL_ID
-from app.utils import weekday, point
+from app.utils import weekday, point, time_difference
 
 router = APIRouter()
 
@@ -88,7 +89,7 @@ async def checkin(checkin_request: CheckInRequest):
         print("User has not committed today.")
         raise HTTPException(
             status_code=400,
-            detail="No commitment found.",
+            detail="User doesn't have a commitment today.",
         )
 
     commit_datetime = datetime.datetime.replace(
@@ -115,37 +116,13 @@ async def checkin(checkin_request: CheckInRequest):
     else:
         print("User has not checked in yet today.")
 
-    time_diff = checkin_at - checkin_at.replace(
-        hour=int(user_commit.time.split(":")[0]),
-        minute=int(user_commit.time.split(":")[1]),
-        second=0,
-        microsecond=0,
+    time_diff_seconds = time_difference.get_time_difference_seconds(
+        commit_time=user_commit.time,
+        checkin_at=checkin_at,
     )
-    if time_diff < datetime.timedelta(0):
-        time_diff_seconds = -(abs(time_diff).total_seconds())
-    else:
-        time_diff_seconds = time_diff.total_seconds()
-
     print(f"Time difference: {time_diff_seconds} seconds")
-
-    # Calculate current points this week from attendance
-    ongoing_activity_dates = weekday.get_ongoing_or_last_weekdays()
-    attendances = attendance_repository.get_attendances(
-        dates=ongoing_activity_dates,
-    )
-
-    total_points_before = 0
-    for attendance in attendances:
-        if attendance.user_id == user.id:
-            total_points_before += point.get_point_change(
-                attendance.time_difference_seconds
-            )
-
-    # Calculate point change
-    point_change = point.get_point_change(time_diff_seconds)
-
-    print(f"Total points (before): {total_points_before}")
-    print(f"Point change: {point_change}")
+    today_point_change = point.get_point_change(time_diff_seconds)
+    print(f"Point change: {today_point_change}")
 
     attendance_repository.put_attendance(
         user_id=user.id,
@@ -159,6 +136,20 @@ async def checkin(checkin_request: CheckInRequest):
         time_difference_seconds=time_diff_seconds,
     )
 
+    # Calculate total points this week from attendance
+    ongoing_activity_dates = weekday.get_ongoing_or_last_weekdays()
+    attendances = attendance_repository.get_attendances(
+        dates=ongoing_activity_dates,
+    )
+
+    tota_points, penalty = point.get_total_points_and_penalty(
+        user_id=user.id,
+        attendances=attendances,
+    )
+
+    print(f"Total points: {tota_points}")
+    print(f"Total penalty: {penalty}")
+
     slack_client.chat_postMessage(
         channel=TARGET_CHANNEL_ID,
         blocks=checkin_notification.blocks(
@@ -166,14 +157,23 @@ async def checkin(checkin_request: CheckInRequest):
             place_name=checkin_place.name,
             checkin_at=checkin_at,
             time_difference_seconds=time_diff_seconds,
-            total_points=total_points_before + point_change,
-            point_change=point_change,
+            total_points=tota_points,
+            point_change=today_point_change,
         ),
         text=checkin_notification.text(
             user_id=user.id,
         ),
     )
     print("Sent checkin notification.")
+
+    # Update user's point
+    point_repository.put_point(
+        start_date=ongoing_activity_dates[0],
+        user_id=user.id,
+        user_name=user.nickname,
+        point=tota_points,
+        penalty=penalty,
+    )
 
     return {
         "place_id": checkin_place.id,

@@ -13,7 +13,8 @@ from app.views import (
     absent_modal,
     absent_notification,
     commitments,
-    summary,
+    status,
+    results,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -86,21 +87,36 @@ async def slack_morning_command(request: Request):
         print("Sent commitment list notification.")
         return Response(status_code=200)
 
-    elif subcommand == "summary":
+    elif subcommand == "status":
         ongoing_or_last_activity_dates = weekday.get_ongoing_or_last_weekdays()
         user_commits = commitment_repository.get_user_commits(
             dates=ongoing_or_last_activity_dates,
         )
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
-            blocks=summary.blocks(
+            blocks=status.blocks(
                 winner_id="",
                 user_points=[],
             ),
-            text=summary.text(),
+            text=status.text(),
         )
 
         print("Sent summary notification.")
+        return Response(status_code=200)
+    elif subcommand == "results":
+        ongoing_or_last_activity_dates = weekday.get_ongoing_or_last_weekdays()
+        user_commits = commitment_repository.get_user_commits(
+            dates=ongoing_or_last_activity_dates,
+        )
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=results.blocks(
+                winner_id="",
+                user_points=[],
+            ),
+            text=results.text(),
+        )
+        print("Sent result notification.")
         return Response(status_code=200)
     elif subcommand == "leaderboard":
         return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}
