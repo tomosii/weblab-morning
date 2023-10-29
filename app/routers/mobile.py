@@ -135,11 +135,11 @@ async def checkin(checkin_request: CheckInRequest):
     attendances = attendance_repository.get_attendances(
         dates=ongoing_activity_dates,
     )
-    tota_points, penalty = point.get_total_points_and_penalty(
+    total_points, penalty = point.get_total_points_and_penalty(
         user_id=user.id,
         attendances=attendances,
     )
-    print(f"Total points: {tota_points}")
+    print(f"Total points: {total_points}")
     print(f"Total penalty: {penalty}")
 
     # チェックイン通知を送信
@@ -150,7 +150,7 @@ async def checkin(checkin_request: CheckInRequest):
             place_name=checkin_place.name,
             checkin_at=checkin_at,
             time_difference_seconds=time_diff_seconds,
-            total_points=tota_points,
+            total_points=total_points,
             point_change=today_point_change,
         ),
         text=checkin_notification.text(
@@ -164,7 +164,7 @@ async def checkin(checkin_request: CheckInRequest):
         start_date=ongoing_activity_dates[0],
         user_id=user.id,
         user_name=user.nickname,
-        point=tota_points,
+        point=total_points,
         penalty=penalty,
     )
 

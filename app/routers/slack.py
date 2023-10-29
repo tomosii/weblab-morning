@@ -4,7 +4,7 @@ import datetime
 
 from zoneinfo import ZoneInfo
 from app.repository.slack import slack_repository
-from app.repository.firebase import commitment_repository
+from app.repository.firebase import commitment_repository, point_repository
 from app.views import (
     cancel,
     commit_modal,
@@ -89,19 +89,17 @@ async def slack_morning_command(request: Request):
 
     elif subcommand == "status":
         ongoing_or_last_activity_dates = weekday.get_ongoing_or_last_weekdays()
-        user_commits = commitment_repository.get_user_commits(
-            dates=ongoing_or_last_activity_dates,
+        points = point_repository.get_point(
+            date=ongoing_or_last_activity_dates[0],
         )
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=status.blocks(
-                winner_id="",
-                user_points=[],
+                points=points,
             ),
             text=status.text(),
         )
-
-        print("Sent summary notification.")
+        print("Sent status notification.")
         return Response(status_code=200)
     elif subcommand == "results":
         return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}

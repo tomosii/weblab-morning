@@ -4,10 +4,12 @@ import os
 from firebase_admin import firestore
 
 # from google.cloud import firestore
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
+print(os.environ.get("FIREBASE_CLIENT_EMAIL"))
 
 credentials = firebase_admin.credentials.Certificate(
     {
@@ -21,3 +23,7 @@ credentials = firebase_admin.credentials.Certificate(
 
 firebase_app = firebase_admin.initialize_app(credentials)
 db = firestore.client()
+print("Firestore initialized.")
+
+data = db.collection("users").document("test").get()
+print(data.to_dict())

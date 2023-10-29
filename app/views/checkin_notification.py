@@ -18,7 +18,9 @@ def blocks(
     checkin_time_text = checkin_at.strftime("%H:%M")
     time_diff_text = get_time_difference_str(time_difference_seconds)
 
-    point_change_text = f"+{point_change}" if point_change > 0 else str(point_change)
+    point_change_text = (
+        f"+{int(point_change)}" if point_change > 0 else str(int(point_change))
+    )
 
     return [
         {
@@ -46,7 +48,7 @@ def blocks(
                 },
                 {
                     "type": "mrkdwn",
-                    "text": f":star: 今週の合計 *{total_points}pt*",
+                    "text": f":star: 今週の合計 *{int(total_points)}pt*",
                 },
             ],
         },

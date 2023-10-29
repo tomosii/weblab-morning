@@ -8,30 +8,26 @@ class PointRepository:
     def __init__(self):
         self.collection = db.collection("points")
 
-    # def get_attendance(self, date: datetime.date) -> list[Attendance]:
-    #     doc_ref = self.collection.document(date.strftime("%Y-%m-%d"))
-    #     doc = doc_ref.get()
+    def get_point(self, date: datetime.date) -> list[Point]:
+        doc_ref = self.collection.document(date.strftime("%Y-%m-%d"))
+        doc = doc_ref.get()
 
-    #     if not doc.exists:
-    #         return []
+        if not doc.exists:
+            return []
 
-    #     attendances = [
-    #         Attendance(
-    #             date=date,
-    #             user_id=data["userId"],
-    #             user_name=data["userName"],
-    #             check_in_at=data["checkInAt"],
-    #             commitment_time=data["commitmentTime"],
-    #             ip_address=data["ipAddress"],
-    #             lat_lng=data["latLng"],
-    #             place_name=data["placeName"],
-    #             time_difference_seconds=data["timeDifferenceSeconds"],
-    #         )
-    #         for data in doc.to_dict().values()
-    #     ]
+        points = [
+            Point(
+                start_date=date,
+                user_id=data["userId"],
+                user_name=data["userName"],
+                point=data["point"],
+                penalty=data["penalty"],
+            )
+            for data in doc.to_dict().values()
+        ]
 
-    #     print(f"[Firestore] Get {len(attendances)} attendances of {date}")
-    #     return attendances
+        print(f"[Firestore] Get {len(points)} points of {date}")
+        return points
 
     def put_point(
         self,
