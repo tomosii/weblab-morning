@@ -27,7 +27,7 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"<@{user_id}> さんがチェックインしました :sunny:",
+                "text": f"<@{user_id}> さんがチェックインしました",
             },
         },
         {

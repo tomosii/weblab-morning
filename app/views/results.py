@@ -1,20 +1,20 @@
 import datetime
 
 from app.utils import weekday
-from app.models.commitment import UserCommitment
+from app.models.point import Point
 
 
 def text():
     return f"今週の朝活勝者の発表です！"
 
 
-def blocks(winner_id: str, user_points):
-    return [
+def blocks(winner_id: str, user_points: list[Point]) -> list[dict]:
+    _blocks = [
         {
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": "1週間お疲れ様でした！:infinity-clap:",
+                "text": "1週間お疲れ様でした！",
                 "emoji": True,
             },
         },
@@ -28,13 +28,16 @@ def blocks(winner_id: str, user_points):
         },
         {
             "type": "section",
-            "text": {"type": "mrkdwn", "text": ":trophy: <@U04QANYLPK6> さんです！！:tada:"},
+            "text": {
+                "type": "mrkdwn",
+                "text": f":trophy: <@{winner_id}> さんです！！:tada:",
+            },
         },
         {
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":placard: 結果",
+                "text": ":star: 結果",
                 "emoji": True,
             },
         },
@@ -61,3 +64,20 @@ def blocks(winner_id: str, user_points):
             ],
         },
     ]
+
+    for point in user_points:
+        point_text = f"*`{point.point}pt`*"
+        if point.penalty < 0:
+            point_text += f"  ({point.penalty}pt)"
+
+        _blocks.append(
+            {
+                "type": "section",
+                "fields": [
+                    {"type": "mrkdwn", "text": f"<@{point.user_id}>"},
+                    {"type": "mrkdwn", "text": point_text},
+                ],
+            }
+        )
+
+    return _blocks

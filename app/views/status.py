@@ -2,7 +2,7 @@ from app.models.point import Point
 
 
 def text():
-    return f"現在の得点の状況です！"
+    return f"現在の得点状況です！"
 
 
 def blocks(points: list[Point]) -> list[dict]:
@@ -44,7 +44,7 @@ def blocks(points: list[Point]) -> list[dict]:
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": "現在の得点の状況です！",
+                "text": "得点状況です！",
                 "emoji": True,
             },
         },
