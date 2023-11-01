@@ -104,11 +104,11 @@ async def slack_morning_command(request: Request):
     elif subcommand == "results":
         today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
         ongoing_or_last_activity_dates = weekday.get_ongoing_or_last_weekdays()
-        # if today < ongoing_or_last_activity_dates[-1]:
-        #     return {
-        #         "response_type": "in_channel",
-        #         "text": "最終結果は朝活終了後に確認できます！:pray:",
-        #     }
+        if today < ongoing_or_last_activity_dates[-1]:
+            return {
+                "response_type": "in_channel",
+                "text": "最終結果は朝活終了後に確認できます！:pray:",
+            }
         points = point_repository.get_point(
             date=ongoing_or_last_activity_dates[0],
         )
