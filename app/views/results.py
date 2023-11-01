@@ -70,11 +70,14 @@ def blocks(
         point_text = f"*`{point.point}pt`*"
         if point.penalty < 0:
             point_text += f"  ({point.penalty}pt)"
+        user_text = f"<@{point.user_id}>"
+        if point in first_place_points:
+            user_text += " :sports_medal:"
         _blocks.append(
             {
                 "type": "section",
                 "fields": [
-                    {"type": "mrkdwn", "text": f"<@{point.user_id}>"},
+                    {"type": "mrkdwn", "text": user_text},
                     {"type": "mrkdwn", "text": point_text},
                 ],
             }
