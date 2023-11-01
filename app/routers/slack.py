@@ -102,16 +102,15 @@ async def slack_morning_command(request: Request):
         print("Sent status notification.")
         return Response(status_code=200)
     elif subcommand == "results":
-        return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}
         ongoing_or_last_activity_dates = weekday.get_ongoing_or_last_weekdays()
-        user_commits = commitment_repository.get_user_commits(
-            dates=ongoing_or_last_activity_dates,
+        points = point_repository.get_point(
+            date=ongoing_or_last_activity_dates[0],
         )
+
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=results.blocks(
-                winner_id="",
-                user_points=[],
+                points=points,
             ),
             text=results.text(),
         )

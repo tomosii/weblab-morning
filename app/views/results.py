@@ -8,7 +8,26 @@ def text():
     return f"今週の朝活勝者の発表です！"
 
 
-def blocks(winner_id: str, user_points: list[Point]) -> list[dict]:
+def blocks(points: list[Point]) -> list[dict]:
+    # 合計ポイントで降順にソート
+    ranking = sorted(points, key=lambda x: x.point, reverse=True)
+    print(f"Point ranking: {ranking}")
+
+    first_place_points: list[Point] = []
+    while len(ranking) > 0:
+        point = ranking.pop(0)
+        if len(first_place_points) == 0:
+            first_place_points.append(point)
+            continue
+        elif point.point == first_place_points[0].point:
+            first_place_points.append(point)
+            continue
+
+    print(f"First place: {first_place_points}")
+
+    winners_ids = [f"*<@{point.user_id}>* さん" for point in first_place_points]
+    winner_text = "、".join(winners_ids)
+
     _blocks = [
         {
             "type": "section",
@@ -30,7 +49,7 @@ def blocks(winner_id: str, user_points: list[Point]) -> list[dict]:
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f":trophy: <@{winner_id}> さんです！！:tada:",
+                "text": f":trophy: {winner_text}です！！:tada:",
             },
         },
         {
@@ -65,7 +84,7 @@ def blocks(winner_id: str, user_points: list[Point]) -> list[dict]:
         },
     ]
 
-    for point in user_points:
+    for point in points:
         point_text = f"*`{point.point}pt`*"
         if point.penalty < 0:
             point_text += f"  ({point.penalty}pt)"
