@@ -33,6 +33,8 @@ def blocks(
         elif times.winning_times == second_place_times[0].winning_times:
             second_place_times.append(times)
             continue
+        else:
+            break
     print(f"First place: {first_place_times}")
     print(f"Second place: {second_place_times}")
 
@@ -50,15 +52,17 @@ def blocks(
         if len(first_place_points) == 0:
             first_place_points.append(point)
             continue
-        elif point.point == first_place_points[0].point:
+        elif point.total_point == first_place_points[0].total_point:
             first_place_points.append(point)
             continue
         elif len(second_place_points) == 0:
             second_place_points.append(point)
             continue
-        elif point.point == second_place_points[0].point:
+        elif point.total_point == second_place_points[0].total_point:
             second_place_points.append(point)
             continue
+        else:
+            break
     print(f"First place: {first_place_points}")
     print(f"Second place: {second_place_points}")
 
@@ -76,15 +80,17 @@ def blocks(
         if len(first_place_penalty) == 0:
             first_place_penalty.append(point)
             continue
-        elif point.point == first_place_penalty[0].point:
+        elif point.total_penalty == first_place_penalty[0].total_penalty:
             first_place_penalty.append(point)
             continue
         elif len(second_place_penalty) == 0:
             second_place_penalty.append(point)
             continue
-        elif point.point == second_place_penalty[0].point:
+        elif point.total_penalty == second_place_penalty[0].total_penalty:
             second_place_penalty.append(point)
             continue
+        else:
+            break
     print(f"First place: {first_place_penalty}")
     print(f"Second place: {second_place_penalty}")
 

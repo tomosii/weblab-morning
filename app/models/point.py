@@ -36,7 +36,7 @@ class UserPoint:
         self.total_penalty = total_penalty
 
     def __repr__(self):
-        return f"<UserPoint {self.user_id} {self.user_name} {self.dates} {self.total_point} {self.total_penalty}>"
+        return f"<UserPoint {self.user_id} {self.user_name} {self.total_point} {self.total_penalty}>"
 
 
 class UserWinningTimes:
