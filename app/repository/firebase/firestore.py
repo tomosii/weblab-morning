@@ -24,6 +24,3 @@ credentials = firebase_admin.credentials.Certificate(
 firebase_app = firebase_admin.initialize_app(credentials)
 db = firestore.client()
 print("Firestore initialized.")
-
-data = db.collection("users").document("test").get()
-print(data.to_dict())
