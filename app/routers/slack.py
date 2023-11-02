@@ -65,6 +65,18 @@ async def slack_morning_command(request: Request):
     elif subcommand == "absent":
         today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
         absent_date = today + datetime.timedelta(days=1)
+        commits = commitment_repository.get_commit(
+            date=absent_date,
+        )
+        for commit in commits:
+            if commit.user_id == user_id:
+                print("User has a commitment tomorrow.")
+                break
+        else:
+            print("User doesn't have a commitment tomorrow.")
+            return {
+                "text": "明日の朝活には参加していません！\n（欠席連絡は前日のみ可能です）",
+            }
         response = slack_client.views_open(
             trigger_id=form["trigger_id"],
             view=absent_modal.modal_view(absent_date),
@@ -184,7 +196,6 @@ async def slack_interactivity(request: Request):
             ),
         )
         print("Sent commit notification.")
-
         return Response(status_code=200)
 
     elif modal_title == "欠席の連絡":
@@ -196,7 +207,6 @@ async def slack_interactivity(request: Request):
             user_id=user_id,
             date=absent_date,
         )
-
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=absent_notification.blocks(
