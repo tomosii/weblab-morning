@@ -26,4 +26,5 @@ async def root():
 
 @app.get("/cron")
 async def cron():
+    print("This is called by cron job.")
     return Response(status_code=200)
