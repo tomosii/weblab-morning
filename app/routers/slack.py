@@ -202,7 +202,6 @@ async def slack_interactivity(request: Request):
         absent_reason = answers["absent-reason-block"]["absent-reason-action"]["value"]
         today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
         absent_date = today + datetime.timedelta(days=1)
-
         commitment_repository.disable_commit(
             user_id=user_id,
             date=absent_date,
