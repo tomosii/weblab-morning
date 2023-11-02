@@ -61,7 +61,7 @@ def blocks(points: list[Point]) -> list[dict]:
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f":first_place_medal: 1位  *{first_place_points[0].point}pt*",
+                "text": f":first_place_medal: 1位   *{first_place_points[0].point}pt*",
             },
         },
         {

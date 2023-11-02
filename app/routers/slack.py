@@ -5,6 +5,7 @@ import datetime
 from zoneinfo import ZoneInfo
 from app.repository.slack import slack_repository
 from app.repository.firebase import commitment_repository, point_repository
+from app.models.point import Point, UserPoint, UserWinningTimes
 from app.views import (
     cancel,
     commit_modal,
@@ -15,6 +16,7 @@ from app.views import (
     commitments,
     status,
     results,
+    leaderboard,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -135,7 +137,39 @@ async def slack_morning_command(request: Request):
         print("Sent result notification.")
         return Response(status_code=200)
     elif subcommand == "leaderboard":
-        return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}
+        user_winning_times: dict[str, UserWinningTimes] = {}
+        points_of_weeks = point_repository.get_all_points_of_weeks()
+        # 週ごと
+        for week_points in points_of_weeks.values():
+            # この週のポイントランキング
+            ranking = sorted(week_points, key=lambda x: x.point, reverse=True)
+            # 優勝者のポイント
+            first_place_point = ranking[0].point
+            for point in ranking:
+                # 優勝回数をインクリメント
+                if point.point < first_place_point:
+                    break
+                if point.user_id not in user_winning_times:
+                    user_winning_times[point.user_id] = UserWinningTimes(
+                        user_id=point.user_id,
+                        user_name=point.user_name,
+                        winning_times=1,
+                    )
+                else:
+                    user_winning_times[point.user_id].winning_times += 1
+
+        user_points = point_repository.get_all_user_points()
+
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=leaderboard.blocks(
+                user_winning_times=user_winning_times.values(),
+                user_points=user_points,
+            ),
+            text=leaderboard.text(),
+        )
+        print("Sent leaderboard notification.")
+        return Response(status_code=200)
     elif subcommand == "help":
         return {
             "response_type": "in_channel",
