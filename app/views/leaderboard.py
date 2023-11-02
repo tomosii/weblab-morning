@@ -70,7 +70,7 @@ def blocks(
     penalty_ranking = sorted(
         user_points,
         key=lambda x: x.total_penalty,
-        reverse=True,
+        reverse=False,
     )
     print(f"Total penalty ranking: {penalty_ranking}")
     first_place_penalty: list[UserPoint] = []
