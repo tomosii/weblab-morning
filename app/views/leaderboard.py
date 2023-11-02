@@ -96,222 +96,218 @@ def blocks(
 
     return [
         {
-            "blocks": [
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "これまでの朝活を振り返ってみましょう！",
+                "emoji": True,
+            },
+        },
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":crown: 勝利回数ランキング",
+                "emoji": True,
+            },
+        },
+        {"type": "divider"},
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":first_place_medal: 1位   *{first_place_times[0].winning_times}勝*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
                 {
-                    "type": "section",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "これまでの朝活を振り返ってみましょう！",
-                        "emoji": True,
-                    },
-                },
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": ":crown: 勝利回数ランキング",
-                        "emoji": True,
-                    },
-                },
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f":first_place_medal: 1位   *{first_place_times[0].winning_times}勝*",
-                    },
-                },
-                {
-                    "type": "rich_text",
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
                     "elements": [
                         {
-                            "type": "rich_text_list",
-                            "style": "bullet",
-                            "indent": 0,
-                            "border": 0,
+                            "type": "rich_text_section",
                             "elements": [
                                 {
-                                    "type": "rich_text_section",
-                                    "elements": [
-                                        {
-                                            "type": "user",
-                                            "user_id": first_place_time.user_id,
-                                        }
-                                    ],
+                                    "type": "user",
+                                    "user_id": first_place_time.user_id,
                                 }
-                                for first_place_time in first_place_times
                             ],
                         }
+                        for first_place_time in first_place_times
                     ],
-                },
+                }
+            ],
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":second_place_medal: 2位   *{second_place_times[0].winning_times}勝*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
                 {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f":second_place_medal: 2位   *{second_place_times[0].winning_times}勝*",
-                    },
-                },
-                {
-                    "type": "rich_text",
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
                     "elements": [
                         {
-                            "type": "rich_text_list",
-                            "style": "bullet",
-                            "indent": 0,
-                            "border": 0,
+                            "type": "rich_text_section",
                             "elements": [
                                 {
-                                    "type": "rich_text_section",
-                                    "elements": [
-                                        {
-                                            "type": "user",
-                                            "user_id": second_place_time.user_id,
-                                        }
-                                    ],
+                                    "type": "user",
+                                    "user_id": second_place_time.user_id,
                                 }
-                                for second_place_time in second_place_times
                             ],
                         }
+                        for second_place_time in second_place_times
                     ],
-                },
+                }
+            ],
+        },
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":gem: 累計ポイントランキング",
+                "emoji": True,
+            },
+        },
+        {"type": "divider"},
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":first_place_medal: 1位   *{first_place_points[0].total_point}pt*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
                 {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": ":gem: 累計ポイントランキング",
-                        "emoji": True,
-                    },
-                },
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f":first_place_medal: 1位   *{first_place_points[0].total_point}pt*",
-                    },
-                },
-                {
-                    "type": "rich_text",
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
                     "elements": [
                         {
-                            "type": "rich_text_list",
-                            "style": "bullet",
-                            "indent": 0,
-                            "border": 0,
+                            "type": "rich_text_section",
                             "elements": [
                                 {
-                                    "type": "rich_text_section",
-                                    "elements": [
-                                        {
-                                            "type": "user",
-                                            "user_id": first_place_point.user_id,
-                                        }
-                                    ],
+                                    "type": "user",
+                                    "user_id": first_place_point.user_id,
                                 }
-                                for first_place_point in first_place_points
                             ],
                         }
+                        for first_place_point in first_place_points
                     ],
-                },
+                }
+            ],
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":second_place_medal: 2位   *{second_place_points[0].total_point}pt*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
                 {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f":second_place_medal: 2位   *{second_place_points[0].total_point}pt*",
-                    },
-                },
-                {
-                    "type": "rich_text",
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
                     "elements": [
                         {
-                            "type": "rich_text_list",
-                            "style": "bullet",
-                            "indent": 0,
-                            "border": 0,
+                            "type": "rich_text_section",
                             "elements": [
                                 {
-                                    "type": "rich_text_section",
-                                    "elements": [
-                                        {
-                                            "type": "user",
-                                            "user_id": second_place_point.user_id,
-                                        }
-                                    ],
+                                    "type": "user",
+                                    "user_id": second_place_point.user_id,
                                 }
-                                for second_place_point in second_place_points
                             ],
                         }
+                        for second_place_point in second_place_points
                     ],
-                },
+                }
+            ],
+        },
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":pleading_face: 累計ペナルティランキング",
+                "emoji": True,
+            },
+        },
+        {"type": "divider"},
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":first_place_medal: 1位   *{first_place_penalty[0].total_penalty}pt*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
                 {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": ":pleading_face: 累計ペナルティランキング",
-                        "emoji": True,
-                    },
-                },
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f":first_place_medal: 1位   *{first_place_penalty[0].total_penalty}pt*",
-                    },
-                },
-                {
-                    "type": "rich_text",
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
                     "elements": [
                         {
-                            "type": "rich_text_list",
-                            "style": "bullet",
-                            "indent": 0,
-                            "border": 0,
+                            "type": "rich_text_section",
                             "elements": [
                                 {
-                                    "type": "rich_text_section",
-                                    "elements": [
-                                        {
-                                            "type": "user",
-                                            "user_id": first_place_point.user_id,
-                                        }
-                                    ],
+                                    "type": "user",
+                                    "user_id": first_place_point.user_id,
                                 }
-                                for first_place_point in first_place_penalty
                             ],
                         }
+                        for first_place_point in first_place_penalty
                     ],
-                },
+                }
+            ],
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":second_place_medal: 2位   *{second_place_penalty[0].total_penalty}pt*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
                 {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f":second_place_medal: 2位   *{second_place_penalty[0].total_penalty}pt*",
-                    },
-                },
-                {
-                    "type": "rich_text",
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
                     "elements": [
                         {
-                            "type": "rich_text_list",
-                            "style": "bullet",
-                            "indent": 0,
-                            "border": 0,
+                            "type": "rich_text_section",
                             "elements": [
                                 {
-                                    "type": "rich_text_section",
-                                    "elements": [
-                                        {
-                                            "type": "user",
-                                            "user_id": second_place_point.user_id,
-                                        }
-                                    ],
+                                    "type": "user",
+                                    "user_id": second_place_point.user_id,
                                 }
-                                for second_place_point in second_place_penalty
                             ],
                         }
+                        for second_place_point in second_place_penalty
                     ],
-                },
-            ]
-        }
+                }
+            ],
+        },
     ]
