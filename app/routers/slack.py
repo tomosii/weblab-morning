@@ -5,6 +5,7 @@ import datetime
 from zoneinfo import ZoneInfo
 from app.repository.slack import slack_repository
 from app.repository.firebase import commitment_repository, point_repository
+from app.models.point import Point, UserPoint, UserWinningTimes
 from app.views import (
     cancel,
     commit_modal,
@@ -15,6 +16,7 @@ from app.views import (
     commitments,
     status,
     results,
+    leaderboard,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -65,6 +67,18 @@ async def slack_morning_command(request: Request):
     elif subcommand == "absent":
         today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
         absent_date = today + datetime.timedelta(days=1)
+        commits = commitment_repository.get_commit(
+            date=absent_date,
+        )
+        for commit in commits:
+            if commit.user_id == user_id:
+                print("User has a commitment tomorrow.")
+                break
+        else:
+            print("User doesn't have a commitment tomorrow.")
+            return {
+                "text": "明日の朝活には参加していません！\n（欠席連絡は前日のみ可能です）",
+            }
         response = slack_client.views_open(
             trigger_id=form["trigger_id"],
             view=absent_modal.modal_view(absent_date),
@@ -123,7 +137,39 @@ async def slack_morning_command(request: Request):
         print("Sent result notification.")
         return Response(status_code=200)
     elif subcommand == "leaderboard":
-        return {"response_type": "in_channel", "text": "この機能はまだ開発中です！:pray:"}
+        user_winning_times: dict[str, UserWinningTimes] = {}
+        points_of_weeks = point_repository.get_all_points_of_weeks()
+        # 週ごと
+        for week_points in points_of_weeks.values():
+            # この週のポイントランキング
+            ranking = sorted(week_points, key=lambda x: x.point, reverse=True)
+            # 優勝者のポイント
+            first_place_point = ranking[0].point
+            for point in ranking:
+                # 優勝回数をインクリメント
+                if point.point < first_place_point:
+                    break
+                if point.user_id not in user_winning_times:
+                    user_winning_times[point.user_id] = UserWinningTimes(
+                        user_id=point.user_id,
+                        user_name=point.user_name,
+                        winning_times=1,
+                    )
+                else:
+                    user_winning_times[point.user_id].winning_times += 1
+
+        user_points = point_repository.get_all_user_points()
+
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=leaderboard.blocks(
+                user_winning_times=user_winning_times.values(),
+                user_points=user_points,
+            ),
+            text=leaderboard.text(),
+        )
+        print("Sent leaderboard notification.")
+        return Response(status_code=200)
     elif subcommand == "help":
         return {
             "response_type": "in_channel",
@@ -184,19 +230,16 @@ async def slack_interactivity(request: Request):
             ),
         )
         print("Sent commit notification.")
-
         return Response(status_code=200)
 
     elif modal_title == "欠席の連絡":
         absent_reason = answers["absent-reason-block"]["absent-reason-action"]["value"]
         today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
         absent_date = today + datetime.timedelta(days=1)
-
         commitment_repository.disable_commit(
             user_id=user_id,
             date=absent_date,
         )
-
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=absent_notification.blocks(

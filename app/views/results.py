@@ -17,14 +17,13 @@ def blocks(
     print(f"Point ranking: {ranking}")
 
     first_place_points: list[Point] = []
-    while len(ranking) > 0:
-        point = ranking.pop(0)
+    for point in ranking:
         if len(first_place_points) == 0:
             first_place_points.append(point)
-            continue
         elif point.point == first_place_points[0].point:
             first_place_points.append(point)
-            continue
+        else:
+            break
 
     print(f"First place: {first_place_points}")
 
@@ -66,7 +65,7 @@ def blocks(
         {"type": "divider"},
     ]
 
-    for point in points:
+    for point in ranking:
         point_text = f"*`{point.point}pt`*"
         if point.penalty < 0:
             point_text += f"  ({point.penalty}pt)"
