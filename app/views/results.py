@@ -51,7 +51,7 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"{winner_text}です！！ :tada::tada:",
+                "text": f"{winner_text}です！！ :tada:",
             },
         },
         {
