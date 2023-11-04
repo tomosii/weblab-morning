@@ -51,14 +51,14 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f":trophy: {winner_text}です！！ :tada:",
+                "text": f"{winner_text}です！！ :tada::tada:",
             },
         },
         {
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":star: 結果",
+                "text": "結果",
                 "emoji": True,
             },
         },
@@ -80,6 +80,28 @@ def blocks(
                     {"type": "mrkdwn", "text": point_text},
                 ],
             }
+        )
+
+    total_penalty = sum([point.penalty for point in points])
+    if total_penalty == 0:
+        _blocks.extend(
+            [
+                {"type": "divider"},
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "今週はなんと遅刻者がいませんでした！\nおめでとうございます！:clap",
+                    },
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "来週もこの調子で頑張りましょう！",
+                    },
+                },
+            ]
         )
 
     start_date = weekday.get_jp_date_str(date=dates[0], with_day_of_week=True)

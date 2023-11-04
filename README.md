@@ -1,20 +1,5 @@
 # slack-morning-bot
 
-## Run
-
-```bash
-bash build.sh
-```
-
-```bash
-bash run-api.sh
-```
-
-```bash
-bash run-ngrok.sh
-```
-
-
 ## Run locally
 
 ```bash
