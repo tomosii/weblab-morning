@@ -184,6 +184,8 @@ async def slack_morning_command(request: Request):
             ),
             text=places.text(),
         )
+        print("Sent places notification.")
+        return Response(status_code=200)
     elif subcommand == "help":
         return {
             "response_type": "in_channel",
