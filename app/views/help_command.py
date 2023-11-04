@@ -106,6 +106,20 @@ blocks = [
                         "elements": [
                             {
                                 "type": "text",
+                                "text": "/morning places",
+                                "style": {"code": True},
+                            },
+                            {
+                                "type": "text",
+                                "text": ": チェックイン場所一覧を表示します。",
+                            },
+                        ],
+                    },
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {
+                                "type": "text",
                                 "text": "/morning help",
                                 "style": {"code": True},
                             },

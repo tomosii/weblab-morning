@@ -4,7 +4,11 @@ import datetime
 
 from zoneinfo import ZoneInfo
 from app.repository.slack import slack_repository
-from app.repository.firebase import commitment_repository, point_repository
+from app.repository.firebase import (
+    commitment_repository,
+    point_repository,
+    place_repository,
+)
 from app.models.point import Point, UserPoint, UserWinningTimes
 from app.views import (
     cancel,
@@ -17,6 +21,7 @@ from app.views import (
     status,
     results,
     leaderboard,
+    places,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -170,6 +175,15 @@ async def slack_morning_command(request: Request):
         )
         print("Sent leaderboard notification.")
         return Response(status_code=200)
+    elif subcommand == "places":
+        all_places = place_repository.get_places()
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=places.blocks(
+                places=all_places,
+            ),
+            text=places.text(),
+        )
     elif subcommand == "help":
         return {
             "response_type": "in_channel",
