@@ -14,7 +14,7 @@ def blocks(user_commits: list[UserCommitment]):
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":sunglasses: 今回の参戦者たち",
+                "text": "今週の参加者 :sunglasses:",
                 "emoji": True,
             },
         },

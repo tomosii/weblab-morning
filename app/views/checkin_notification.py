@@ -44,11 +44,11 @@ def blocks(
             "fields": [
                 {
                     "type": "mrkdwn",
-                    "text": f":candy: *`{point_change_text}pt`*",
+                    "text": f":star: *`{point_change_text}pt`*",
                 },
                 {
                     "type": "mrkdwn",
-                    "text": f":star: 今週の合計 *{int(total_points)}pt*",
+                    "text": f"今週の合計 *{int(total_points)}pt*",
                 },
             ],
         },

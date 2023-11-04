@@ -175,7 +175,10 @@ async def slack_morning_command(request: Request):
             "response_type": "in_channel",
             "blocks": help_command.blocks,
         }
-
+    elif subcommand == "test":
+        return {
+            "text": "おはようございます！",
+        }
     else:
         return {
             "response_type": "in_channel",
