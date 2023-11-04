@@ -32,16 +32,7 @@ def blocks(user_id: str, commit_time: str, commit_dates: list[datetime.date]):
             "elements": [
                 {
                     "type": "mrkdwn",
-                    "text": f":clock10:  *{hour}時{minute}分*",
-                },
-            ],
-        },
-        {
-            "type": "context",
-            "elements": [
-                {
-                    "type": "mrkdwn",
-                    "text": dates_with_commas,
+                    "text": f":clock10:  *{hour}時{minute}分*    {dates_with_commas}",
                 },
             ],
         },
