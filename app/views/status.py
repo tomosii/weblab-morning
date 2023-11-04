@@ -182,4 +182,4 @@ def blocks(points: list[Point]) -> list[dict]:
                 },
             },
         )
-    return
+    return _blocks
