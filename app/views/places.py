@@ -6,7 +6,7 @@ def text():
 
 
 def blocks(places: list[Place]) -> list[dict]:
-    return [
+    _blocks = [
         {
             "type": "section",
             "text": {
@@ -14,14 +14,19 @@ def blocks(places: list[Place]) -> list[dict]:
                 "text": "チェックイン対応エリア一覧です！",
             },
         },
-       {
-			"type": "context",
-			"elements": [
-				{
-					"type": "mrkdwn",
-					"text": f":round_pushpin:  *{place.name}*",
-				}
-			]
-		}
-        for place in places if place.enabled
     ]
+
+    for place in places:
+        if place.enabled:
+            _blocks.append(
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": f":round_pushpin:  *{place.name}*",
+                        }
+                    ],
+                }
+            )
+    return _blocks
