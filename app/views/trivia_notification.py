@@ -5,19 +5,20 @@ def text():
 def blocks():
     return [
         {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": ":bulb: 新しい豆知識が追加されました！",
-                "emoji": True,
-            },
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": ":bulb: *新しい豆知識が追加されました！*",
+                }
+            ],
         },
         {
             "type": "context",
             "elements": [
                 {
                     "type": "mrkdwn",
-                    "text": f"朝活で時間通りに来た人にだけ教えちゃいます！",
+                    "text": "朝活で時間通りに来た人にだけ教えちゃいます！",
                 }
             ],
         },
