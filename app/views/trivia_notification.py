@@ -9,7 +9,7 @@ def blocks():
             "elements": [
                 {
                     "type": "mrkdwn",
-                    "text": ":bulb: *新しい豆知識が追加されました！*",
+                    "text": ":bulb: *新しい豆知識が追加されました*",
                 }
             ],
         },
