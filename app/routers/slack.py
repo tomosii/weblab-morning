@@ -8,6 +8,7 @@ from app.repository.firebase import (
     commitment_repository,
     point_repository,
     place_repository,
+    trivia_repository,
 )
 from app.models.point import Point, UserPoint, UserWinningTimes
 from app.views import (
@@ -298,15 +299,20 @@ async def slack_interactivity(request: Request):
         return Response(status_code=200)
     elif modal_title == "豆知識の追加":
         trivia_text = answers["trivia-create-block"]["trivia-create-action"]["value"]
+        created_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+        trivia_repository.put_trivia(
+            user_id=user_id,
+            user_name=user_name,
+            trivia_text=trivia_text,
+            created_at=created_at,
+        )
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=trivia_notification.blocks(),
             text=trivia_notification.text(),
         )
         print("Sent trivia notification.")
-
         return {
-            "response_type": "ephemeral",
             "blocks": trivia_notification.ephemeral_blocks(trivia_text),
         }
 
