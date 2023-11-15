@@ -48,6 +48,7 @@ def modal_view() -> dict:
             },
             {
                 "type": "input",
+                "block_id": "trivia-create-block",
                 "element": {
                     "type": "plain_text_input",
                     "action_id": "trivia-create-action",

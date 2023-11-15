@@ -23,6 +23,7 @@ from app.views import (
     leaderboard,
     places,
     trivia_modal,
+    trivia_notification,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -295,6 +296,19 @@ async def slack_interactivity(request: Request):
         print("Sent absent notification.")
 
         return Response(status_code=200)
+    elif modal_title == "豆知識の追加":
+        trivia_text = answers["trivia-create-block"]["trivia-create-action"]["value"]
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=trivia_notification.blocks(),
+            text=trivia_notification.text(),
+        )
+        print("Sent trivia notification.")
+
+        return {
+            "response_type": "ephemeral",
+            "blocks": trivia_notification.ephemeral_blocks(trivia_text),
+        }
 
 
 @router.post("/slack/events")
