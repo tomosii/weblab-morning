@@ -1,11 +1,15 @@
 from app.models.point import Point
+from app.utils import weekday
 
 
 def text():
     return f"現在の得点状況です！"
 
 
-def blocks(points: list[Point]) -> list[dict]:
+def blocks(
+    points: list[Point],
+    dates: list[datetime.date],
+) -> list[dict]:
     # 合計ポイントで降順にソート
     ranking = sorted(
         points,
@@ -182,4 +186,19 @@ def blocks(points: list[Point]) -> list[dict]:
                 },
             },
         )
+
+    start_date = weekday.get_jp_date_str(date=dates[0], with_day_of_week=True)
+    end_date = weekday.get_jp_date_str(date=dates[-1], with_day_of_week=True)
+    _blocks.append(
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"{start_date} 〜 {end_date}",
+                }
+            ],
+        }
+    )
+
     return _blocks

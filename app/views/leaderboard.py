@@ -3,7 +3,7 @@ from app.models.point import UserPoint, UserWinningTimes
 
 
 def text():
-    return f"今までの朝活を振り返ってみましょう！"
+    return f"これまでの朝活を振り返ってみましょう！"
 
 
 def blocks(
@@ -107,7 +107,7 @@ def blocks(
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":crown: 勝利回数ランキング",
+                "text": ":crown: 通算勝利回数ランキング",
                 "emoji": True,
             },
         },
@@ -176,7 +176,7 @@ def blocks(
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":gem: 累計ポイントランキング",
+                "text": ":gem: 通算ポイントランキング",
                 "emoji": True,
             },
         },
@@ -245,7 +245,7 @@ def blocks(
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":pleading_face: 累計ペナルティランキング",
+                "text": ":pleading_face: 通算ペナルティランキング",
                 "emoji": True,
             },
         },
