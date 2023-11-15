@@ -152,7 +152,7 @@ async def slack_morning_command(request: Request):
 
         ongoing_or_coming_activity_dates = weekday.get_ongoing_or_coming_weekdays()
         # 開催中の週を除くために検索
-        for start_date_str, week_points in points_of_weeks.items():
+        for start_date_str, week_points in list(points_of_weeks.items()):
             start_date = week_points[0].start_date
             if start_date != ongoing_or_coming_activity_dates[0]:
                 continue
