@@ -115,6 +115,7 @@ async def slack_morning_command(request: Request):
             channel=TARGET_CHANNEL_ID,
             blocks=status.blocks(
                 points=points,
+                dates=ongoing_or_last_activity_dates,
             ),
             text=status.text(),
         )
