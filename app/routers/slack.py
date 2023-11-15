@@ -313,9 +313,15 @@ async def slack_interactivity(request: Request):
             text=trivia_notification.text(),
         )
         print("Sent trivia notification.")
-        return {
-            "blocks": trivia_notification.ephemeral_blocks(trivia_text),
-        }
+
+        slack_client.chat_postEphemeral(
+            channel=TARGET_CHANNEL_ID,
+            user=user_id,
+            blocks=trivia_notification.ephemeral_blocks(trivia_text),
+            text=trivia_notification.ephemeral_text(),
+        )
+        print("Sent trivia ephemeral notification.")
+        return Response(status_code=200)
 
 
 @router.post("/slack/events")

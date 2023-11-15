@@ -24,6 +24,10 @@ def blocks():
     ]
 
 
+def ephemeral_text():
+    return f"豆知識を追加しました！"
+
+
 def ephemeral_blocks(trivia_text: str):
     return [
         [
