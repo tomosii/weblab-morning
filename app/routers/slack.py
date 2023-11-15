@@ -22,6 +22,7 @@ from app.views import (
     results,
     leaderboard,
     places,
+    trivia_modal,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -200,6 +201,13 @@ async def slack_morning_command(request: Request):
             text=places.text(),
         )
         print("Sent places notification.")
+        return Response(status_code=200)
+    elif subcommand == "trivia":
+        response = slack_client.views_open(
+            trigger_id=form["trigger_id"],
+            view=trivia_modal.modal_view(),
+        )
+        print("Sent trivia modal.")
         return Response(status_code=200)
     elif subcommand == "help":
         return {
