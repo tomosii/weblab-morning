@@ -1,9 +1,10 @@
 from app.models.point import Point
 from app.utils import weekday
+import datetime
 
 
 def text():
-    return f"現在の得点状況です！"
+    return f"今週の得点状況です！"
 
 
 def blocks(
@@ -48,7 +49,7 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": "得点状況です！",
+                "text": "今週の得点状況です！",
                 "emoji": True,
             },
         },
