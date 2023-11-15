@@ -31,24 +31,22 @@ def ephemeral_text():
 
 def ephemeral_blocks(trivia_text: str):
     return [
-        [
-            {
-                "type": "section",
-                "text": {
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "豆知識を追加しました！",
+                "emoji": True,
+            },
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
                     "type": "plain_text",
-                    "text": "豆知識を追加しました！",
+                    "text": trivia_text,
                     "emoji": True,
-                },
-            },
-            {
-                "type": "context",
-                "elements": [
-                    {
-                        "type": "plain_text",
-                        "text": trivia_text,
-                        "emoji": True,
-                    }
-                ],
-            },
-        ],
+                }
+            ],
+        },
     ]
