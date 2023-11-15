@@ -1,4 +1,4 @@
-def text(user_id: str):
+def text():
     return f"新しい豆知識が追加されました！"
 
 
