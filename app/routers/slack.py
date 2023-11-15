@@ -144,6 +144,20 @@ async def slack_morning_command(request: Request):
     elif subcommand == "leaderboard":
         user_winning_times: dict[str, UserWinningTimes] = {}
         points_of_weeks = point_repository.get_all_points_of_weeks()
+        today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
+
+        ongoing_or_coming_activity_dates = weekday.get_ongoing_or_coming_weekdays()
+        # 開催中の週を除くために検索
+        for start_date in points_of_weeks.keys():
+            if start_date != ongoing_or_coming_activity_dates[0]:
+                continue
+            if today >= ongoing_or_coming_activity_dates[-1]:
+                # 開催中でも最終日であれば残す
+                continue
+            else:
+                # 開催中の週を除く
+                points_of_weeks.pop(start_date)
+
         # 週ごと
         for week_points in points_of_weeks.values():
             # この週のポイントランキング
