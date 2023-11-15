@@ -152,7 +152,7 @@ async def slack_morning_command(request: Request):
 
         ongoing_or_coming_activity_dates = weekday.get_ongoing_or_coming_weekdays()
         # 開催中の週を除くために検索
-        for week_points in points_of_weeks.values():
+        for start_date_str, week_points in points_of_weeks.items():
             start_date = week_points[0].start_date
             if start_date != ongoing_or_coming_activity_dates[0]:
                 continue
@@ -160,7 +160,7 @@ async def slack_morning_command(request: Request):
                 # 開催中でも最終日であれば残す
                 continue
             # 開催中の週を除く
-            points_of_weeks.pop(start_date)
+            points_of_weeks.pop(start_date_str)
             print(f"Removed ongoing week: {start_date}")
 
         # 週ごと
