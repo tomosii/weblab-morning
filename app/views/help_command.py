@@ -120,6 +120,20 @@ blocks = [
                         "elements": [
                             {
                                 "type": "text",
+                                "text": "/morning trivia",
+                                "style": {"code": True},
+                            },
+                            {
+                                "type": "text",
+                                "text": ": 豆知識を追加します。",
+                            },
+                        ],
+                    },
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {
+                                "type": "text",
                                 "text": "/morning help",
                                 "style": {"code": True},
                             },

@@ -8,6 +8,7 @@ from app.repository.firebase import (
     commitment_repository,
     point_repository,
     place_repository,
+    trivia_repository,
 )
 from app.models.point import Point, UserPoint, UserWinningTimes
 from app.views import (
@@ -22,6 +23,8 @@ from app.views import (
     results,
     leaderboard,
     places,
+    trivia_modal,
+    trivia_notification,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -149,15 +152,16 @@ async def slack_morning_command(request: Request):
 
         ongoing_or_coming_activity_dates = weekday.get_ongoing_or_coming_weekdays()
         # 開催中の週を除くために検索
-        for start_date in points_of_weeks.keys():
+        for start_date_str, week_points in list(points_of_weeks.items()):
+            start_date = week_points[0].start_date
             if start_date != ongoing_or_coming_activity_dates[0]:
                 continue
             if today >= ongoing_or_coming_activity_dates[-1]:
                 # 開催中でも最終日であれば残す
                 continue
-            else:
-                # 開催中の週を除く
-                points_of_weeks.pop(start_date)
+            # 開催中の週を除く
+            points_of_weeks.pop(start_date_str)
+            print(f"Removed ongoing week: {start_date}")
 
         # 週ごと
         for week_points in points_of_weeks.values():
@@ -200,6 +204,13 @@ async def slack_morning_command(request: Request):
             text=places.text(),
         )
         print("Sent places notification.")
+        return Response(status_code=200)
+    elif subcommand == "trivia":
+        response = slack_client.views_open(
+            trigger_id=form["trigger_id"],
+            view=trivia_modal.modal_view(),
+        )
+        print("Sent trivia modal.")
         return Response(status_code=200)
     elif subcommand == "help":
         return {
@@ -286,6 +297,30 @@ async def slack_interactivity(request: Request):
         )
         print("Sent absent notification.")
 
+        return Response(status_code=200)
+    elif modal_title == "豆知識の追加":
+        trivia_text = answers["trivia-create-block"]["trivia-create-action"]["value"]
+        created_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+        trivia_repository.put_trivia(
+            user_id=user_id,
+            user_name=user_name,
+            trivia_text=trivia_text,
+            created_at=created_at,
+        )
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=trivia_notification.blocks(),
+            text=trivia_notification.text(),
+        )
+        print("Sent trivia notification.")
+
+        slack_client.chat_postEphemeral(
+            channel=TARGET_CHANNEL_ID,
+            user=user_id,
+            blocks=trivia_notification.ephemeral_blocks(trivia_text),
+            text=trivia_notification.ephemeral_text(),
+        )
+        print("Sent trivia ephemeral notification.")
         return Response(status_code=200)
 
 
