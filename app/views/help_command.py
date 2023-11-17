@@ -120,12 +120,12 @@ blocks = [
                         "elements": [
                             {
                                 "type": "text",
-                                "text": "/morning trivia",
+                                "text": "/morning mystats",
                                 "style": {"code": True},
                             },
                             {
                                 "type": "text",
-                                "text": ": 豆知識を追加します。",
+                                "text": ": 自分の成績を表示します。",
                             },
                         ],
                     },
