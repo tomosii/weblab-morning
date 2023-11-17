@@ -54,39 +54,12 @@ def blocks(
                 "text": f"{winner_text}です！！ :tada:",
             },
         },
-        {
-            "type": "header",
-            "text": {
-                "type": "plain_text",
-                "text": "結果",
-                "emoji": True,
-            },
-        },
-        {"type": "divider"},
     ]
-
-    for point in ranking:
-        point_text = f"*`{point.point}pt`*"
-        if point.penalty < 0:
-            point_text += f"  ({point.penalty}pt)"
-        user_text = f"<@{point.user_id}>"
-        if point in first_place_points:
-            user_text += " :sports_medal:"
-        _blocks.append(
-            {
-                "type": "section",
-                "fields": [
-                    {"type": "mrkdwn", "text": user_text},
-                    {"type": "mrkdwn", "text": point_text},
-                ],
-            }
-        )
 
     total_penalty = sum([point.penalty for point in points])
     if total_penalty == 0:
         _blocks.extend(
             [
-                {"type": "divider"},
                 {
                     "type": "section",
                     "text": {
@@ -106,17 +79,45 @@ def blocks(
     else:
         _blocks.extend(
             [
-                {"type": "divider"},
                 {
-                    "type": "context",
-                    "elements": [
-                        {
-                            "type": "mrkdwn",
-                            "text": f"ペナルティ合計:  *{total_penalty}pt*",
-                        }
-                    ],
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"ペナルティ合計は *`{total_penalty}pt`* でした :money_with_wings:",
+                    },
                 },
             ]
+        )
+
+    _blocks.extend(
+        [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": "結果",
+                    "emoji": True,
+                },
+            },
+            {"type": "divider"},
+        ]
+    )
+
+    for point in ranking:
+        point_text = f"*`{point.point}pt`*"
+        if point.penalty < 0:
+            point_text += f"  ({point.penalty}pt)"
+        user_text = f"<@{point.user_id}>"
+        if point in first_place_points:
+            user_text += " :sports_medal:"
+        _blocks.append(
+            {
+                "type": "section",
+                "fields": [
+                    {"type": "mrkdwn", "text": user_text},
+                    {"type": "mrkdwn", "text": point_text},
+                ],
+            }
         )
 
     start_date = weekday.get_jp_date_str(date=dates[0], with_day_of_week=True)
