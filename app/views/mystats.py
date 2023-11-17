@@ -25,7 +25,6 @@ def blocks(
             "text": {
                 "type": "mrkdwn",
                 "text": f"<@{user_id}> さんのこれまでの戦績です！",
-                "emoji": True,
             },
         },
         {
