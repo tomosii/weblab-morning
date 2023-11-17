@@ -103,6 +103,21 @@ def blocks(
                 },
             ]
         )
+    else:
+        _blocks.extend(
+            [
+                {"type": "divider"},
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": f"ペナルティ合計:  *{total_penalty}pt*",
+                        }
+                    ],
+                },
+            ]
+        )
 
     start_date = weekday.get_jp_date_str(date=dates[0], with_day_of_week=True)
     end_date = weekday.get_jp_date_str(date=dates[-1], with_day_of_week=True)
