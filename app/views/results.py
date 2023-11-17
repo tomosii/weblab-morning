@@ -54,16 +54,54 @@ def blocks(
                 "text": f"{winner_text}です！！ :tada:",
             },
         },
-        {
-            "type": "header",
-            "text": {
-                "type": "plain_text",
-                "text": "結果",
-                "emoji": True,
-            },
-        },
-        {"type": "divider"},
     ]
+
+    total_penalty = sum([point.penalty for point in points])
+    if total_penalty == 0:
+        _blocks.extend(
+            [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "今週はなんと遅刻者がいませんでした！\nおめでとうございます！:clap",
+                    },
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "来週もこの調子で頑張りましょう！",
+                    },
+                },
+            ]
+        )
+    else:
+        _blocks.extend(
+            [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"ペナルティ合計は *`{total_penalty}pt`* でした :money_with_wings:",
+                    },
+                },
+            ]
+        )
+
+    _blocks.extend(
+        [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": "結果",
+                    "emoji": True,
+                },
+            },
+            {"type": "divider"},
+        ]
+    )
 
     for point in ranking:
         point_text = f"*`{point.point}pt`*"
@@ -80,28 +118,6 @@ def blocks(
                     {"type": "mrkdwn", "text": point_text},
                 ],
             }
-        )
-
-    total_penalty = sum([point.penalty for point in points])
-    if total_penalty == 0:
-        _blocks.extend(
-            [
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "今週はなんと遅刻者がいませんでした！\nおめでとうございます！:clap",
-                    },
-                },
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "来週もこの調子で頑張りましょう！",
-                    },
-                },
-            ]
         )
 
     start_date = weekday.get_jp_date_str(date=dates[0], with_day_of_week=True)
