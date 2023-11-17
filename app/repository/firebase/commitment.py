@@ -93,6 +93,22 @@ class CommitmentRepository:
         user_commits = self.parse_user_commitments(commits=commitments)
         return user_commits
 
+    def get_all_user_commits(self) -> list[UserCommitment]:
+        all_commits = []
+        for doc in self.collection.stream():
+            for user_id, data in doc.to_dict().items():
+                if data["enabled"]:
+                    all_commits.append(
+                        Commitment(
+                            date=datetime.datetime.strptime(doc.id, "%Y-%m-%d").date(),
+                            user_id=data["userId"],
+                            user_name=data["userName"],
+                            time=data["time"],
+                        )
+                    )
+        user_commits = self.parse_user_commitments(commits=all_commits)
+        return user_commits
+
     @staticmethod
     def parse_user_commitments(commits: list[Commitment]) -> list[UserCommitment]:
         user_map: dict[str, UserCommitment] = {}

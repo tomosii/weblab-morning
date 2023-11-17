@@ -25,6 +25,7 @@ from app.views import (
     places,
     trivia_modal,
     trivia_notification,
+    mystats,
 )
 from app.constants import TARGET_CHANNEL_ID
 from app.utils import weekday
@@ -211,6 +212,65 @@ async def slack_morning_command(request: Request):
             view=trivia_modal.modal_view(),
         )
         print("Sent trivia modal.")
+        return Response(status_code=200)
+    elif subcommand == "mystats":
+        points_of_weeks = point_repository.get_all_points_of_weeks()
+        today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
+        ongoing_or_coming_activity_dates = weekday.get_ongoing_or_coming_weekdays()
+        # 開催中の週を除くために検索
+        for start_date_str, week_points in list(points_of_weeks.items()):
+            start_date = week_points[0].start_date
+            if start_date != ongoing_or_coming_activity_dates[0]:
+                continue
+            if today >= ongoing_or_coming_activity_dates[-1]:
+                # 開催中でも最終日であれば残す
+                continue
+            # 開催中の週を除く
+            points_of_weeks.pop(start_date_str)
+            print(f"Removed ongoing week: {start_date}")
+
+        my_winning_times = 0
+        my_joined_weeks_count = 0
+        # 週ごと
+        for week_points in points_of_weeks.values():
+            # この週のポイントランキング
+            ranking = sorted(week_points, key=lambda x: x.point, reverse=True)
+            # 優勝者のポイント
+            first_place_point = ranking[0].point
+            for point in ranking:
+                # 自分のポイントでなければスキップ
+                if point.user_id != user_id:
+                    continue
+                # 参加週数をインクリメント
+                my_joined_weeks_count += 1
+                # 優勝回数をインクリメント
+                if point.point == first_place_point:
+                    my_winning_times += 1
+
+        my_joined_days_count = 0
+        all_user_commits = commitment_repository.get_all_user_commits()
+        for user_commits in all_user_commits:
+            if user_commits.user_id == user_id:
+                my_joined_days_count = len(user_commits.dates)
+                break
+
+        user_points = point_repository.get_all_user_points()
+        for my_points in user_points:
+            if my_points.user_id == user_id:
+                break
+
+        slack_client.chat_postMessage(
+            channel=TARGET_CHANNEL_ID,
+            blocks=mystats.blocks(
+                user_id=user_id,
+                my_winning_times=my_winning_times,
+                my_joined_weeks_count=my_joined_weeks_count,
+                my_joined_days_count=my_joined_days_count,
+                my_points=my_points,
+            ),
+            text=mystats.text(user_id=user_id),
+        )
+        print("Sent mystats notification.")
         return Response(status_code=200)
     elif subcommand == "help":
         return {
