@@ -36,7 +36,7 @@ def blocks(
             "fields": [
                 {
                     "type": "mrkdwn",
-                    "text": ":crown:  *通算勝利回数*",
+                    "text": ":crown:  通算勝利回数",
                 },
                 {
                     "type": "mrkdwn",
@@ -44,7 +44,7 @@ def blocks(
                 },
                 {
                     "type": "mrkdwn",
-                    "text": ":bookmark:  *通算参加週数*",
+                    "text": ":bookmark:  通算参加週数",
                 },
                 {
                     "type": "mrkdwn",
@@ -52,7 +52,7 @@ def blocks(
                 },
                 {
                     "type": "mrkdwn",
-                    "text": ":date:  *通算参加日数*",
+                    "text": ":date:  通算参加日数",
                 },
                 {
                     "type": "mrkdwn",
@@ -65,19 +65,19 @@ def blocks(
             "fields": [
                 {
                     "type": "mrkdwn",
-                    "text": ":gem:  *通算ポイント*",
+                    "text": ":gem:  通算ポイント",
                 },
                 {
                     "type": "mrkdwn",
-                    "text": f"*{my_points.total_point}pt*",
+                    "text": f"*`{my_points.total_point}pt`*",
                 },
                 {
                     "type": "mrkdwn",
-                    "text": ":pleading_face:  *通算ペナルティ*",
+                    "text": ":pleading_face:  通算ペナルティ",
                 },
                 {
                     "type": "mrkdwn",
-                    "text": f"*{my_points.total_penalty}pt*",
+                    "text": f"*`{my_points.total_penalty}pt`*",
                 },
             ],
         },
