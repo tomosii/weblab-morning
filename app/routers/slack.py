@@ -251,7 +251,7 @@ async def slack_morning_command(request: Request):
         all_user_commits = commitment_repository.get_all_user_commits()
         for user_commits in all_user_commits:
             if user_commits.user_id == user_id:
-                my_joined_days_count = len(user_commits.commits)
+                my_joined_days_count = len(user_commits.dates)
                 break
 
         user_points = point_repository.get_all_user_points()
