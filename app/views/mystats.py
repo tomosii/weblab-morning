@@ -23,7 +23,7 @@ def blocks(
         {
             "type": "section",
             "text": {
-                "type": "plain_text",
+                "type": "mrkdwn",
                 "text": f"<@{user_id}> さんのこれまでの戦績です！",
                 "emoji": True,
             },
