@@ -3,7 +3,7 @@ from app.models.point import UserPoint, UserWinningTimes
 
 
 def text(user_id: str):
-    return f"<@{user_id}>さんのこれまでの朝活の振り返りです！"
+    return f"<@{user_id}> さんのこれまでの朝活の振り返りです！"
 
 
 def blocks(
@@ -24,7 +24,7 @@ def blocks(
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": f"<@{user_id}>さんのこれまでの戦績です！",
+                "text": f"<@{user_id}> さんのこれまでの戦績です！",
                 "emoji": True,
             },
         },
