@@ -37,6 +37,14 @@ async def checkin(checkin_request: CheckInRequest):
     checkin_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     print("Current time: ", checkin_at)
 
+    # 午前5時以降かどうかチェック
+    if checkin_at.hour < 5:
+        print("Check-in is not available at this hour.")
+        raise HTTPException(
+            status_code=400,
+            detail="Check-in is not available at this hour.",
+        )
+
     # ユーザー情報を取得
     user = user_repository.get_user(checkin_request.email)
     if user is None:
