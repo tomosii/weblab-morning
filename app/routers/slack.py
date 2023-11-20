@@ -305,6 +305,16 @@ async def slack_interactivity(request: Request):
         commit_time = answers["commit-time-block"]["commit-time-action"][
             "selected_time"
         ]
+        hour = int(commit_time.split(":")[0])
+        minute = int(commit_time.split(":")[1])
+        if hour < 5 or (hour == 12 and minute > 0) or hour > 12:
+            return {
+                "response_action": "errors",
+                "errors": {
+                    "commit-time-block": "設定可能な時間は5時から12時までです！",
+                },
+            }
+
         commit_dates_options = answers["commit-dates-block"]["commit-dates-action"][
             "selected_options"
         ]
