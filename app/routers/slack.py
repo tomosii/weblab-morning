@@ -311,7 +311,7 @@ async def slack_interactivity(request: Request):
             return {
                 "response_action": "errors",
                 "errors": {
-                    "commit-time-block": "設定可能な時間は5時から12時までです！",
+                    "commit-time-block": "朝活の時間は5時から12時までです！",
                 },
             }
 
