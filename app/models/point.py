@@ -45,12 +45,12 @@ class UserWinningTimes:
         user_id: str,
         user_name: str,
         winning_times: int,
+        rewards: float,
     ):
         self.user_id = user_id
         self.user_name = user_name
         self.winning_times = winning_times
+        self.rewards = rewards
 
     def __repr__(self):
-        return (
-            f"<UserWinningTimes {self.user_id} {self.user_name} {self.winning_times}>"
-        )
+        return f"<UserWinningTimes {self.user_id} {self.user_name} {self.winning_times} {self.rewards}>"
