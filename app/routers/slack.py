@@ -244,21 +244,31 @@ async def slack_morning_command(request: Request):
 
         my_winning_times = 0
         my_joined_weeks_count = 0
+        my_total_rewards = 0
         # 週ごと
         for week_points in points_of_weeks.values():
             # この週のポイントランキング
             ranking = sorted(week_points, key=lambda x: x.point, reverse=True)
             # 優勝者のポイント
             first_place_point = ranking[0].point
+            # 優勝者人数
+            first_place_users_count = len(
+                [point for point in ranking if point.point == first_place_point]
+            )
+            # ペナルティ合計
+            total_penalty = sum([point.penalty for point in week_points]) * -1
+            # 1人あたりの報酬ポイント
+            reward_point = total_penalty / first_place_users_count
             for point in ranking:
                 # 自分のポイントでなければスキップ
                 if point.user_id != user_id:
                     continue
                 # 参加週数をインクリメント
                 my_joined_weeks_count += 1
-                # 優勝回数をインクリメント
+                # 優勝回数と報酬をインクリメント
                 if point.point == first_place_point:
                     my_winning_times += 1
+                    my_total_rewards += reward_point
 
         my_joined_days_count = 0
         all_user_commits = commitment_repository.get_all_user_commits()
@@ -277,6 +287,7 @@ async def slack_morning_command(request: Request):
             blocks=mystats.blocks(
                 user_id=user_id,
                 my_winning_times=my_winning_times,
+                my_total_rewards=my_total_rewards,
                 my_joined_weeks_count=my_joined_weeks_count,
                 my_joined_days_count=my_joined_days_count,
                 my_points=my_points,
