@@ -170,8 +170,16 @@ async def slack_morning_command(request: Request):
             ranking = sorted(week_points, key=lambda x: x.point, reverse=True)
             # 優勝者のポイント
             first_place_point = ranking[0].point
+            # 優勝者人数
+            first_place_users_count = len(
+                [point for point in ranking if point.point == first_place_point]
+            )
+            # ペナルティ合計
+            total_penalty = sum([point.penalty for point in week_points]) * -1
+            # 1人あたりの報酬ポイント
+            reward_point = total_penalty / first_place_users_count
             for point in ranking:
-                # 優勝回数をインクリメント
+                # 優勝回数と報酬をインクリメント
                 if point.point < first_place_point:
                     break
                 if point.user_id not in user_winning_times:
@@ -179,17 +187,22 @@ async def slack_morning_command(request: Request):
                         user_id=point.user_id,
                         user_name=point.user_name,
                         winning_times=1,
+                        rewards=reward_point,
                     )
                 else:
                     user_winning_times[point.user_id].winning_times += 1
+                    user_winning_times[point.user_id].rewards += reward_point
 
         user_points = point_repository.get_all_user_points()
+
+        all_user_commits = commitment_repository.get_all_user_commits()
 
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=leaderboard.blocks(
                 user_winning_times=user_winning_times.values(),
                 user_points=user_points,
+                user_commits=all_user_commits,
             ),
             text=leaderboard.text(),
         )
@@ -231,21 +244,31 @@ async def slack_morning_command(request: Request):
 
         my_winning_times = 0
         my_joined_weeks_count = 0
+        my_total_rewards = 0
         # 週ごと
         for week_points in points_of_weeks.values():
             # この週のポイントランキング
             ranking = sorted(week_points, key=lambda x: x.point, reverse=True)
             # 優勝者のポイント
             first_place_point = ranking[0].point
+            # 優勝者人数
+            first_place_users_count = len(
+                [point for point in ranking if point.point == first_place_point]
+            )
+            # ペナルティ合計
+            total_penalty = sum([point.penalty for point in week_points]) * -1
+            # 1人あたりの報酬ポイント
+            reward_point = total_penalty / first_place_users_count
             for point in ranking:
                 # 自分のポイントでなければスキップ
                 if point.user_id != user_id:
                     continue
                 # 参加週数をインクリメント
                 my_joined_weeks_count += 1
-                # 優勝回数をインクリメント
+                # 優勝回数と報酬をインクリメント
                 if point.point == first_place_point:
                     my_winning_times += 1
+                    my_total_rewards += reward_point
 
         my_joined_days_count = 0
         all_user_commits = commitment_repository.get_all_user_commits()
@@ -264,6 +287,7 @@ async def slack_morning_command(request: Request):
             blocks=mystats.blocks(
                 user_id=user_id,
                 my_winning_times=my_winning_times,
+                my_total_rewards=my_total_rewards,
                 my_joined_weeks_count=my_joined_weeks_count,
                 my_joined_days_count=my_joined_days_count,
                 my_points=my_points,
@@ -305,6 +329,16 @@ async def slack_interactivity(request: Request):
         commit_time = answers["commit-time-block"]["commit-time-action"][
             "selected_time"
         ]
+        hour = int(commit_time.split(":")[0])
+        minute = int(commit_time.split(":")[1])
+        if hour < 5 or (hour == 12 and minute > 0) or hour > 12:
+            return {
+                "response_action": "errors",
+                "errors": {
+                    "commit-time-block": "朝活の時間は5時から12時までです！",
+                },
+            }
+
         commit_dates_options = answers["commit-dates-block"]["commit-dates-action"][
             "selected_options"
         ]

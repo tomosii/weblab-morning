@@ -11,12 +11,14 @@ def blocks(
     my_winning_times: int,
     my_joined_weeks_count: int,
     my_joined_days_count: int,
+    my_total_rewards: float,
     my_points: UserPoint,
 ) -> list[dict]:
     print(f"My winning times: {my_winning_times}")
     print(f"My joined weeks count: {my_joined_weeks_count}")
     print(f"My joined days count: {my_joined_days_count}")
     print(f"My total point: {my_points.total_point}")
+    print(f"My total rewards: {my_total_rewards}")
     print(f"My total penalty: {my_points.total_penalty}")
 
     _blocks = [
@@ -69,6 +71,14 @@ def blocks(
                 {
                     "type": "mrkdwn",
                     "text": f"*`{my_points.total_point}pt`*",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": ":moneybag:  通算獲得報酬",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": f"*`{my_total_rewards}pt`*",
                 },
                 {
                     "type": "mrkdwn",
