@@ -303,75 +303,6 @@ def blocks(
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":moneybag: 通算報酬ランキング",
-                "emoji": True,
-            },
-        },
-        {"type": "divider"},
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": f":first_place_medal: 1位   *{first_place_rewards[0].rewards}pt*",
-            },
-        },
-        {
-            "type": "rich_text",
-            "elements": [
-                {
-                    "type": "rich_text_list",
-                    "style": "bullet",
-                    "indent": 0,
-                    "border": 0,
-                    "elements": [
-                        {
-                            "type": "rich_text_section",
-                            "elements": [
-                                {
-                                    "type": "user",
-                                    "user_id": first_place_reward.user_id,
-                                }
-                            ],
-                        }
-                        for first_place_reward in first_place_rewards
-                    ],
-                }
-            ],
-        },
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": f":second_place_medal: 2位   *{second_place_rewards[0].rewards}pt*",
-            },
-        },
-        {
-            "type": "rich_text",
-            "elements": [
-                {
-                    "type": "rich_text_list",
-                    "style": "bullet",
-                    "indent": 0,
-                    "border": 0,
-                    "elements": [
-                        {
-                            "type": "rich_text_section",
-                            "elements": [
-                                {
-                                    "type": "user",
-                                    "user_id": second_place_reward.user_id,
-                                }
-                            ],
-                        }
-                        for second_place_reward in second_place_rewards
-                    ],
-                }
-            ],
-        },
-        {
-            "type": "header",
-            "text": {
-                "type": "plain_text",
                 "text": ":date: 通算参加日数ランキング",
                 "emoji": True,
             },
@@ -433,6 +364,75 @@ def blocks(
                             ],
                         }
                         for second_place_day in second_place_days
+                    ],
+                }
+            ],
+        },
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":moneybag: 通算報酬ランキング",
+                "emoji": True,
+            },
+        },
+        {"type": "divider"},
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":first_place_medal: 1位   *{first_place_rewards[0].rewards}pt*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
+                {
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
+                    "elements": [
+                        {
+                            "type": "rich_text_section",
+                            "elements": [
+                                {
+                                    "type": "user",
+                                    "user_id": first_place_reward.user_id,
+                                }
+                            ],
+                        }
+                        for first_place_reward in first_place_rewards
+                    ],
+                }
+            ],
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f":second_place_medal: 2位   *{second_place_rewards[0].rewards}pt*",
+            },
+        },
+        {
+            "type": "rich_text",
+            "elements": [
+                {
+                    "type": "rich_text_list",
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
+                    "elements": [
+                        {
+                            "type": "rich_text_section",
+                            "elements": [
+                                {
+                                    "type": "user",
+                                    "user_id": second_place_reward.user_id,
+                                }
+                            ],
+                        }
+                        for second_place_reward in second_place_rewards
                     ],
                 }
             ],

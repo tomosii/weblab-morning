@@ -175,7 +175,7 @@ async def slack_morning_command(request: Request):
                 [point for point in ranking if point.point == first_place_point]
             )
             # ペナルティ合計
-            total_penalty = sum([point.penalty for point in week_points])
+            total_penalty = sum([point.penalty for point in week_points]) * -1
             # 1人あたりの報酬ポイント
             reward_point = total_penalty / first_place_users_count
             for point in ranking:
