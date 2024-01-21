@@ -64,7 +64,7 @@ def blocks(
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "今週はなんと遅刻者がいませんでした！\nおめでとうございます！:clap",
+                        "text": "今週はなんと遅刻者がいませんでした！\nおめでとうございます:clap::clap:",
                     },
                 },
                 {
