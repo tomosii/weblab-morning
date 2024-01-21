@@ -44,8 +44,8 @@ def blocks(
             "fields": [
                 {
                     "type": "mrkdwn",
-                    # "text": f":star: *`{point_change_text}pt`*",
-                    "text": f":christmas_tree: *`{point_change_text}pt`*",
+                    "text": f":star: *`{point_change_text}pt`*",
+                    # "text": f":christmas_tree: *`{point_change_text}pt`*",
                 },
                 {
                     "type": "mrkdwn",
