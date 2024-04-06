@@ -86,7 +86,7 @@ async def checkin(checkin_request: CheckInRequest):
 
     # ----- チェックイン場所の判定 -----
     # 場所一覧を取得
-    places = place_repository.get_places()
+    places = place_repository.get_enabled_places()
 
     # IPアドレスの一致
     checkin_place = None

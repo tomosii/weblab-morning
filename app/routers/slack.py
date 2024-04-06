@@ -209,7 +209,7 @@ async def slack_morning_command(request: Request):
         print("Sent leaderboard notification.")
         return Response(status_code=200)
     elif subcommand == "places":
-        all_places = place_repository.get_places()
+        all_places = place_repository.get_enabled_places()
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=places.blocks(
