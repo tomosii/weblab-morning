@@ -26,4 +26,4 @@ async def root():
 
 @app.get("/cron")
 async def cron():
-    return {"message": "Good morning!"}
+    return {"message": "Good morning from cron!"}
