@@ -29,6 +29,15 @@ class CheckInRequest(BaseModel):
     ip_address: str
 
 
+# === Errors ===
+# 1001: User not found.
+# 1002: User does not have a commitment today.
+# 1003: Check-in is not available at this hour.
+# 2001: Already checked in today.
+# 2002: IP address not matched with any place.
+# 2003: Out of range of the check-in area.
+
+
 @router.post("/checkin", dependencies=[Security(api_key_auth)])
 async def checkin(checkin_request: CheckInRequest):
     print(f"Received checkin request from {checkin_request.email}")
@@ -42,7 +51,10 @@ async def checkin(checkin_request: CheckInRequest):
         print("Check-in is not available at this hour.")
         raise HTTPException(
             status_code=400,
-            detail="Check-in is not available at this hour.",
+            detail={
+                "code": 1003,
+                "message": "Check-in is not available at this hour.",
+            },
         )
 
     # ユーザー情報を取得
@@ -51,7 +63,10 @@ async def checkin(checkin_request: CheckInRequest):
         print(f"User not found: {checkin_request.email}")
         raise HTTPException(
             status_code=400,
-            detail="User not found.",
+            detail={
+                "code": 1001,
+                "message": "User not found.",
+            },
         )
 
     # 本日が参加日かどうかを確認
@@ -66,7 +81,10 @@ async def checkin(checkin_request: CheckInRequest):
         print("User has not committed today.")
         raise HTTPException(
             status_code=400,
-            detail="User doesn't have a commitment today.",
+            detail={
+                "code": 1002,
+                "message": "User does not have a commitment today.",
+            },
         )
     print(f"Commitment time: {user_commit.time}")
 
@@ -79,7 +97,10 @@ async def checkin(checkin_request: CheckInRequest):
             print("User has already checked in today.")
             raise HTTPException(
                 status_code=400,
-                detail="Already checked in today.",
+                detail={
+                    "code": 2001,
+                    "message": "Already checked in today.",
+                },
             )
     else:
         print("User has not checked in yet today.")
@@ -100,7 +121,10 @@ async def checkin(checkin_request: CheckInRequest):
         print("IP address not matched with any place.")
         raise HTTPException(
             status_code=400,
-            detail="IP address not matched with any place.",
+            detail={
+                "code": 2002,
+                "message": "IP address not matched with any place.",
+            },
         )
 
     # IPアドレスから判定した場所との距離を計算
@@ -113,7 +137,10 @@ async def checkin(checkin_request: CheckInRequest):
         print("Distance is too far.")
         raise HTTPException(
             status_code=400,
-            detail="Out of range of the check-in area.",
+            detail={
+                "code": 2003,
+                "message": "Out of range of the check-in area.",
+            },
         )
 
     # 時間差からポイントを計算
