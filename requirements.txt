@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-slack_sdk
-firebase-admin
-geopy
-python-dotenv
-jpholiday
-python-multipart

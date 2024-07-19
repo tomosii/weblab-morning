@@ -1,11 +1,29 @@
-# slack-morning-bot
+## Frontend
 
-## Run locally
 
-```bash
-uvicorn app.main:app --reload
+### Run
+
+Debug mode:
+```
+flutter run --web-renderer html -d chrome
 ```
 
-```bash
-ngrok http 8000
+Release mode:
 ```
+flutter run --web-renderer html --release -d chrome
+```
+
+### Build
+
+```
+flutter build web --web-renderer html --release
+```
+
+### Deploy
+
+```
+firebase deploy
+```
+
+## Backend
+
