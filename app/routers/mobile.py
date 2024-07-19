@@ -30,12 +30,12 @@ class CheckInRequest(BaseModel):
 
 
 # === Errors ===
-# 1001: User not found.
-# 1002: User does not have a commitment today.
-# 1003: Check-in is not available at this hour.
-# 2001: Already checked in today.
-# 2002: IP address not matched with any place.
-# 2003: Out of range of the check-in area.
+# 1001: UserNotFoundException
+# 1002: NotCommittedException
+# 1003: OutOfHoursException
+# 2001: AlreadyCheckedInException
+# 2002: InvalidIpAddressException
+# 2003: InvalidPlaceException
 
 
 @router.post("/checkin", dependencies=[Security(api_key_auth)])
