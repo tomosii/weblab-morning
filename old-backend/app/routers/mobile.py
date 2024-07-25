@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, Security
 from pydantic import BaseModel
 from geopy.distance import geodesic
 from zoneinfo import ZoneInfo
+
 from ..repository.firebase import (
     place_repository,
     user_repository,

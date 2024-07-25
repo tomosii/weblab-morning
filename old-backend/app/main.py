@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Response
-from routers import mobile, slack
 from starlette.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+
+from .routers import mobile, slack
 
 load_dotenv()
 
