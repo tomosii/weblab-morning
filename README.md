@@ -1,5 +1,9 @@
 ## Frontend
 
+```
+cd frontend
+```
+
 
 ### Run
 
@@ -27,3 +31,6 @@ firebase deploy
 
 ## Backend
 
+```
+cd backend
+```

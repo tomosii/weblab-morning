@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "old-backend/app/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "old-backend/app/main.py"
+    }
+  ]
+}
