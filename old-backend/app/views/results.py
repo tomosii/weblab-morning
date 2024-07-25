@@ -1,7 +1,7 @@
 import datetime
 
-from app.utils import weekday
-from app.models.point import Point
+from ..utils import weekday
+from ..models.point import Point
 
 
 def text():

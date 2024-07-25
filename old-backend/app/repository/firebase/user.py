@@ -1,5 +1,5 @@
-from app.repository.firebase.firestore import db
-from app.models.user import User
+from .firestore import db
+from ...models.user import User
 
 
 class UserRepository:

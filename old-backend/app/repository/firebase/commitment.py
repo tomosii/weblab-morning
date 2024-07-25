@@ -1,7 +1,7 @@
 import datetime
 
-from app.repository.firebase.firestore import db
-from app.models.commitment import Commitment, UserCommitment
+from .firestore import db
+from ...models.commitment import Commitment, UserCommitment
 
 
 class CommitmentRepository:

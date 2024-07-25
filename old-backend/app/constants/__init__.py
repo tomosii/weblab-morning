@@ -1,1 +1,1 @@
-from app.constants.channels import TARGET_CHANNEL_ID
+from .channels import TARGET_CHANNEL_ID

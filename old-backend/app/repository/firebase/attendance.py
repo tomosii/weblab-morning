@@ -1,8 +1,8 @@
 import datetime
 
 from google.cloud.firestore import GeoPoint
-from app.repository.firebase.firestore import db
-from app.models.attendance import Attendance
+from .firestore import db
+from ...models.attendance import Attendance
 
 
 class AttendanceRepository:

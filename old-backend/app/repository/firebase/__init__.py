@@ -1,8 +1,8 @@
-from app.repository.firebase.commitment import CommitmentRepository
-from app.repository.firebase.place import PlaceRepository
-from app.repository.firebase.user import UserRepository
-from app.repository.firebase.attendance import AttendanceRepository
-from app.repository.firebase.point import PointRepository
+from .commitment import CommitmentRepository
+from .place import PlaceRepository
+from .user import UserRepository
+from .attendance import AttendanceRepository
+from .point import PointRepository
 
 
 commitment_repository = CommitmentRepository()

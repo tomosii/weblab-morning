@@ -1,6 +1,6 @@
 import datetime
 
-from app.utils.time_difference import get_time_difference_str
+from ..utils.time_difference import get_time_difference_str
 
 
 def text(user_id: str):

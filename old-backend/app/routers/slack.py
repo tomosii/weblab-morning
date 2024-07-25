@@ -3,14 +3,14 @@ import json
 import datetime
 
 from zoneinfo import ZoneInfo
-from app.repository.slack import slack_repository
-from app.repository.firebase import (
+from ..repository.slack import slack_repository
+from ..repository.firebase import (
     commitment_repository,
     point_repository,
     place_repository,
 )
-from app.models.point import Point, UserPoint, UserWinningTimes
-from app.views import (
+from ..models.point import Point, UserPoint, UserWinningTimes
+from ..views import (
     cancel,
     commit_modal,
     help_command,
@@ -24,8 +24,8 @@ from app.views import (
     places,
     mystats,
 )
-from app.constants import TARGET_CHANNEL_ID
-from app.utils import weekday
+from ..constants import TARGET_CHANNEL_ID
+from ..utils import weekday
 
 router = APIRouter()
 

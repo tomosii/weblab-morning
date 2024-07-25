@@ -1,5 +1,5 @@
-from app.repository.firebase.firestore import db
-from app.models.place import Place
+from .firestore import db
+from ...models.place import Place
 
 
 class PlaceRepository:
