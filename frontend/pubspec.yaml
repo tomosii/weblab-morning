@@ -1,0 +1,71 @@
+name: morning_web
+description: weblab morning app
+publish_to: 'none'
+version: 1.4.0
+
+environment:
+  sdk: '>=3.1.2 <4.0.0'
+
+dependencies:
+  cloud_firestore: ^4.11.0
+  confetti: ^0.7.0
+  firebase_core: ^2.18.0
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^5.1.0
+  flutter_riverpod: ^2.4.4
+  geolocator: ^11.0.0
+  google_fonts: ^6.1.0
+  http: ^1.1.0
+  intl: ^0.19.0
+  lottie: ^3.1.0
+  shared_preferences: ^2.2.2
+  sprung: ^3.0.1
+  package_info_plus: ^6.0.0
+  loading_animation_widget: ^1.2.1
+  holiday_jp: ^0.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.2
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/NotoSansJP-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/NotoSansJP-Light.ttf
+          weight: 300
+        - asset: assets/fonts/NotoSansJP-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansJP-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansJP-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansJP-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NotoSansJP-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/NotoSansJP-Black.ttf
+          weight: 900
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+
+  assets:
+    - env
+    - assets/images/
+    - assets/lottie/
