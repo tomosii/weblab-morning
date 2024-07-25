@@ -8,7 +8,6 @@ from app.repository.firebase import (
     commitment_repository,
     point_repository,
     place_repository,
-    trivia_repository,
 )
 from app.models.point import Point, UserPoint, UserWinningTimes
 from app.views import (
@@ -23,8 +22,6 @@ from app.views import (
     results,
     leaderboard,
     places,
-    trivia_modal,
-    trivia_notification,
     mystats,
 )
 from app.constants import TARGET_CHANNEL_ID
@@ -219,13 +216,6 @@ async def slack_morning_command(request: Request):
         )
         print("Sent places notification.")
         return Response(status_code=200)
-    elif subcommand == "trivia":
-        response = slack_client.views_open(
-            trigger_id=form["trigger_id"],
-            view=trivia_modal.modal_view(),
-        )
-        print("Sent trivia modal.")
-        return Response(status_code=200)
     elif subcommand == "mystats":
         points_of_weeks = point_repository.get_all_points_of_weeks()
         today = datetime.datetime.now(ZoneInfo("Asia/Tokyo")).date()
@@ -391,30 +381,6 @@ async def slack_interactivity(request: Request):
         )
         print("Sent absent notification.")
 
-        return Response(status_code=200)
-    elif modal_title == "豆知識の追加":
-        trivia_text = answers["trivia-create-block"]["trivia-create-action"]["value"]
-        created_at = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-        trivia_repository.put_trivia(
-            user_id=user_id,
-            user_name=user_name,
-            trivia_text=trivia_text,
-            created_at=created_at,
-        )
-        slack_client.chat_postMessage(
-            channel=TARGET_CHANNEL_ID,
-            blocks=trivia_notification.blocks(),
-            text=trivia_notification.text(),
-        )
-        print("Sent trivia notification.")
-
-        slack_client.chat_postEphemeral(
-            channel=TARGET_CHANNEL_ID,
-            user=user_id,
-            blocks=trivia_notification.ephemeral_blocks(trivia_text),
-            text=trivia_notification.ephemeral_text(),
-        )
-        print("Sent trivia ephemeral notification.")
         return Response(status_code=200)
 
 
