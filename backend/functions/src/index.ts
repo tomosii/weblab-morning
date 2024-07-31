@@ -1,19 +1,21 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
-import {onRequest} from "firebase-functions/v2/https";
+import { onRequest } from "firebase-functions/v2/https";
+// import { onCall } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
+// import { initializeApp } from "firebase-admin/app";
+// import { getFirestore, FieldValue } from "firebase-admin/firestore";
+// import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import { setGlobalOptions } from "firebase-functions/v2";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+setGlobalOptions({ region: "asia-northeast1" });
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const express = require("express");
+const app = express();
+
+app.get("/hello", (request, response) => {
+    logger.info("Hello logs!", { structuredData: true });
+    response.send("Hello from Firebase Functions!");
+});
+
+exports.api = onRequest(app);
+
+// export * from "./schedule/cronTest";

@@ -34,3 +34,10 @@ firebase deploy
 ```
 cd backend
 ```
+
+```
+npm run build
+firebase emulators:start
+firebase deploy --only functions
+firebase login --reauth
+```
