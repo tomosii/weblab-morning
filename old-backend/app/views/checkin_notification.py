@@ -22,6 +22,8 @@ def blocks(
         f"+{int(point_change)}" if point_change > 0 else str(int(point_change))
     )
 
+    point_change_emoji = ":star:" if point_change > 0 else ":rotating_light:"
+
     return [
         {
             "type": "section",
@@ -44,7 +46,7 @@ def blocks(
             "fields": [
                 {
                     "type": "mrkdwn",
-                    "text": f":star: *`{point_change_text}pt`*",
+                    "text": f"{point_change_emoji} *`{point_change_text}pt`*",
                     # "text": f":christmas_tree: *`{point_change_text}pt`*",
                 },
                 {
