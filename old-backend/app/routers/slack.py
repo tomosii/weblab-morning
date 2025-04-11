@@ -330,6 +330,9 @@ async def slack_interactivity(request: Request):
                 },
             }
 
+        print(payload)
+        print(answers)
+
         available_date_values = [
             option["value"]
             for option in answers["commit-dates-block"]["commit-dates-action"][
