@@ -10,14 +10,15 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "18"
+    "node": "22"
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@holiday-jp/holiday_jp": "^2.4.0",
     "@slack/web-api": "^7.3.1",
     "express": "^4.19.2",
     "firebase-admin": "^12.1.0",
-    "firebase-functions": "^5.0.0"
+    "firebase-functions": "^6.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

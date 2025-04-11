@@ -46,12 +46,12 @@ def blocks(
             "fields": [
                 {
                     "type": "mrkdwn",
-                    "text": f"{point_change_emoji} *`{point_change_text}pt`*",
+                    "text": f"{point_change_emoji} *`{point_change_text}` pt*",
                     # "text": f":christmas_tree: *`{point_change_text}pt`*",
                 },
                 {
                     "type": "mrkdwn",
-                    "text": f"今週の合計 *{int(total_points)}pt*",
+                    "text": f"今週の合計 *{int(total_points)} pt*",
                 },
             ],
         },
