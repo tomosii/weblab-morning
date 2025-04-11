@@ -348,9 +348,11 @@ async def slack_interactivity(request: Request):
         print(f"Available dates: {available_date_values}")
         print(f"Selected dates: {selected_date_values}")
 
+        selected_dates = []
         for date_value in available_date_values:
             date = datetime.datetime.strptime(date_value, "%Y-%m-%d").date()
             if date_value in selected_date_values:
+                selected_dates.append(date)
                 commitment_repository.put_commit(
                     user_id=user_id,
                     user_name=user_name,
@@ -362,8 +364,6 @@ async def slack_interactivity(request: Request):
                 commitment_repository.put_commit(
                     user_id=user_id,
                     user_name=user_name,
-                    time=commit_time,
-                    date=date,
                     enabled=False,
                 )
 
