@@ -312,6 +312,7 @@ async def slack_interactivity(request: Request):
     user_name = payload["user"]["username"]
     modal_title = payload["view"]["title"]["text"]
     answers = payload["view"]["state"]["values"]
+    blocks = payload["view"]["blocks"]
 
     print(f"Received submission of {modal_title} from {user_id} ({user_name}).")
 
@@ -330,30 +331,48 @@ async def slack_interactivity(request: Request):
                 },
             }
 
-        commit_dates_options = answers["commit-dates-block"]["commit-dates-action"][
-            "selected_options"
+        commit_dates_block = next(
+            block for block in blocks if block.get("block_id") == "commit-dates-block"
+        )
+        available_date_values = [
+            option["value"] for option in commit_dates_block["element"]["options"]
         ]
-        commit_dates = [
-            datetime.datetime.strptime(option["value"], "%Y-%m-%d").date()
-            for option in commit_dates_options
+        selected_date_values = [
+            option["value"]
+            for option in answers["commit-dates-block"]["commit-dates-action"][
+                "selected_options"
+            ]
         ]
 
         print(f"Commit time: {commit_time}")
-        print(f"Commit dates: {commit_dates}")
+        print(f"Available dates: {available_date_values}")
+        print(f"Selected dates: {selected_date_values}")
 
-        commitment_repository.put_commits(
-            user_id=user_id,
-            user_name=user_name,
-            time=commit_time,
-            dates=commit_dates,
-        )
+        selected_dates = []
+        for date_value in available_date_values:
+            date = datetime.datetime.strptime(date_value, "%Y-%m-%d").date()
+            if date_value in selected_date_values:
+                selected_dates.append(date)
+                commitment_repository.put_commit(
+                    user_id=user_id,
+                    user_name=user_name,
+                    time=commit_time,
+                    date=date,
+                    enabled=True,
+                )
+            else:
+                commitment_repository.put_commit(
+                    user_id=user_id,
+                    user_name=user_name,
+                    enabled=False,
+                )
 
         slack_client.chat_postMessage(
             channel=TARGET_CHANNEL_ID,
             blocks=commit_notification.blocks(
                 user_id=user_id,
                 commit_time=commit_time,
-                commit_dates=commit_dates,
+                commit_dates=selected_dates,
             ),
             text=commit_notification.text(
                 user_id=user_id,
