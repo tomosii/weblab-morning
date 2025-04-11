@@ -312,6 +312,7 @@ async def slack_interactivity(request: Request):
     user_name = payload["user"]["username"]
     modal_title = payload["view"]["title"]["text"]
     answers = payload["view"]["state"]["values"]
+    blocks = payload["view"]["blocks"]
 
     print(f"Received submission of {modal_title} from {user_id} ({user_name}).")
 
@@ -330,14 +331,11 @@ async def slack_interactivity(request: Request):
                 },
             }
 
-        print(payload)
-        print(answers)
-
+        commit_dates_block = next(
+            block for block in blocks if block.get("block_id") == "commit-dates-block"
+        )
         available_date_values = [
-            option["value"]
-            for option in answers["commit-dates-block"]["commit-dates-action"][
-                "options"
-            ]
+            option["value"] for option in commit_dates_block["element"]["options"]
         ]
         selected_date_values = [
             option["value"]
