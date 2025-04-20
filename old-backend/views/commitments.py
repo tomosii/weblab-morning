@@ -1,7 +1,7 @@
 import datetime
 
-from ..utils import weekday
-from ..models.commitment import UserCommitment
+from utils import weekday
+from models.commitment import UserCommitment
 
 
 def text():

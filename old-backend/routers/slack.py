@@ -4,14 +4,14 @@ import datetime
 from fastapi import APIRouter, Request, Response, HTTPException
 from zoneinfo import ZoneInfo
 
-from ..repository.slack import slack_repository
-from ..repository.firebase import (
+from repository.slack import slack_repository
+from repository.firebase import (
     commitment_repository,
     point_repository,
     place_repository,
 )
-from ..models.point import Point, UserPoint, UserWinningTimes
-from ..views import (
+from models.point import Point, UserPoint, UserWinningTimes
+from views import (
     cancel,
     commit_modal,
     help_command,
@@ -25,8 +25,8 @@ from ..views import (
     places,
     mystats,
 )
-from ..constants import TARGET_CHANNEL_ID
-from ..utils import weekday
+from utils import weekday
+from constants import TARGET_CHANNEL_ID
 
 router = APIRouter()
 

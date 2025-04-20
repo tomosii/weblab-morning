@@ -1,6 +1,6 @@
 import datetime
-from ..models.point import UserPoint, UserWinningTimes
-from ..models.commitment import UserCommitment
+from models.point import UserPoint, UserWinningTimes
+from models.commitment import UserCommitment
 
 
 def text():

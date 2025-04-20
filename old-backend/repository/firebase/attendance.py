@@ -3,7 +3,7 @@ import datetime
 from google.cloud.firestore import GeoPoint
 
 from .firestore import db
-from ...models.attendance import Attendance
+from models.attendance import Attendance
 
 
 class AttendanceRepository:

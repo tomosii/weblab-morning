@@ -1,6 +1,6 @@
 import datetime
 
-from ..utils import weekday
+from utils import weekday
 
 
 def text(user_id: str):

@@ -1,5 +1,5 @@
 import datetime
-from ..models.point import UserPoint, UserWinningTimes
+from models.point import UserPoint, UserWinningTimes
 
 
 def text(user_id: str):

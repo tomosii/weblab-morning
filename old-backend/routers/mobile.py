@@ -5,18 +5,19 @@ from pydantic import BaseModel
 from geopy.distance import geodesic
 from zoneinfo import ZoneInfo
 
-from ..repository.firebase import (
+from repository.firebase import (
     place_repository,
     user_repository,
     attendance_repository,
     commitment_repository,
     point_repository,
 )
-from ..auth.api_key import api_key_auth
-from ..views import checkin_notification
-from ..repository.slack import slack_repository
-from ..constants import TARGET_CHANNEL_ID
-from ..utils import weekday, point, time_difference
+from auth.api_key import api_key_auth
+from views import checkin_notification
+from repository.slack import slack_repository
+from utils import weekday, point, time_difference
+from constants import TARGET_CHANNEL_ID
+
 
 router = APIRouter()
 
