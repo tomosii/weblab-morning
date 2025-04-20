@@ -297,3 +297,4 @@ app.*.map.json
 serviceAccount.json
 weblab-morning-firebase-adminsdk-c5y5g-f68c90538e.json
 
+.vercel
