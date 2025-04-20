@@ -42,7 +42,7 @@ Future<NetworkDetail> getNetworkDetail(
 
 Future<LocationDetail> getLocationDetail(
   Position? currentPosition,
-  List<CheckInPlace> checkInplaces,
+  List<CheckInPlace> checkInPlaces,
 ) async {
   if (currentPosition == null) {
     return LocationDetail(
@@ -53,7 +53,7 @@ Future<LocationDetail> getLocationDetail(
   }
 
   // 現在地から各場所までの距離を計算
-  final distanceFromGoal = checkInplaces.map((place) {
+  final distanceFromGoal = checkInPlaces.map((place) {
     final distance = Geolocator.distanceBetween(
       currentPosition.latitude,
       currentPosition.longitude,
@@ -67,7 +67,7 @@ Future<LocationDetail> getLocationDetail(
 
   // 最短距離を取得
   final minDistance = distanceFromGoal.reduce(min);
-  final minDistancePlace = checkInplaces[distanceFromGoal.indexOf(minDistance)];
+  final minDistancePlace = checkInPlaces[distanceFromGoal.indexOf(minDistance)];
 
   print("最短距離: $minDistance (${minDistancePlace.name})");
 
@@ -99,7 +99,7 @@ Future<void> checkIn(BuildContext context, WidgetRef ref) async {
     final currentPosition = await ref.read(currentPositionProvider.future);
     print("Get current position from provider: $currentPosition");
 
-    await Future.delayed(const Duration(milliseconds: 900));
+    // await Future.delayed(const Duration(milliseconds: 900));
 
     // ref.read(checkInProcessStatusProvider.notifier).state =
     //     CheckInProcessStatus.fetchingNetwork;

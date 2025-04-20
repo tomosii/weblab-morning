@@ -364,6 +364,7 @@ async def slack_interactivity(request: Request):
                 commitment_repository.put_commit(
                     user_id=user_id,
                     user_name=user_name,
+                    date=date,
                     enabled=False,
                 )
 
