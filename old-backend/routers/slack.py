@@ -25,7 +25,7 @@ from views import (
     places,
     mystats,
 )
-from utils import weekday
+from morning_utils import weekday
 from constants import TARGET_CHANNEL_ID
 
 router = APIRouter()

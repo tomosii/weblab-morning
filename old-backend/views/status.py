@@ -1,5 +1,5 @@
 from models.point import Point
-from utils import weekday
+from morning_utils import weekday
 import datetime
 
 

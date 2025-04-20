@@ -15,7 +15,7 @@ from repository.firebase import (
 from auth.api_key import api_key_auth
 from views import checkin_notification
 from repository.slack import slack_repository
-from utils import weekday, point, time_difference
+from morning_utils import weekday, point, time_difference
 from constants import TARGET_CHANNEL_ID
 
 
