@@ -29,7 +29,7 @@ export function blocks(
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "4時間が経過しましたが、チェックインがありませんでした :cry:"
+                "text": "本日のチェックインがありませんでした"
             }
         },
         {
