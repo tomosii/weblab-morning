@@ -1,5 +1,5 @@
 import datetime
-from ..utils import weekday
+from morning_utils import weekday
 
 
 def modal_view(activity_dates: list[datetime.date]) -> dict:

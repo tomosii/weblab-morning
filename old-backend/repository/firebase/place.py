@@ -1,5 +1,5 @@
 from .firestore import db
-from ...models.place import Place
+from models.place import Place
 
 
 class PlaceRepository:

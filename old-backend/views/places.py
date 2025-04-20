@@ -1,4 +1,4 @@
-from ..models.place import Place
+from models.place import Place
 
 
 def text():

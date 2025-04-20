@@ -1,4 +1,4 @@
-from ..models.attendance import Attendance
+from models.attendance import Attendance
 
 
 def get_point_change(time_difference_seconds: float):

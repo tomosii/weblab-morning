@@ -1,6 +1,6 @@
 import datetime
 
-from ..utils.time_difference import get_time_difference_str
+from morning_utils import time_difference
 
 
 def text(user_id: str):
@@ -16,7 +16,7 @@ def blocks(
     point_change: int,
 ) -> list[dict]:
     checkin_time_text = checkin_at.strftime("%H:%M")
-    time_diff_text = get_time_difference_str(time_difference_seconds)
+    time_diff_text = time_difference.get_time_difference_str(time_difference_seconds)
 
     point_change_text = (
         f"+{int(point_change)}" if point_change > 0 else str(int(point_change))

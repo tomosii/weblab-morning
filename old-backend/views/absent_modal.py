@@ -1,6 +1,6 @@
 import datetime
 
-from ..utils import weekday
+from morning_utils import weekday
 
 
 def modal_view(absent_date: datetime.date) -> dict:

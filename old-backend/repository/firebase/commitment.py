@@ -1,7 +1,7 @@
 import datetime
 
 from .firestore import db
-from ...models.commitment import Commitment, UserCommitment
+from models.commitment import Commitment, UserCommitment
 
 
 class CommitmentRepository:
@@ -12,9 +12,9 @@ class CommitmentRepository:
         self,
         user_id: str,
         user_name: str,
-        time: str,
         date: datetime.date,
         enabled: bool = True,
+        time: str | None = None,
     ):
         doc_ref = self.collection.document(date.strftime("%Y-%m-%d"))
         doc = doc_ref.get()

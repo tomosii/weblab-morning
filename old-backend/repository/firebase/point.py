@@ -1,7 +1,7 @@
 import datetime
 
 from .firestore import db
-from ...models.point import Point, UserPoint
+from models.point import Point, UserPoint
 
 
 class PointRepository:
