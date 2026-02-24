@@ -136,7 +136,7 @@ async def checkin(checkin_request: CheckInRequest):
             (checkin_place.lat_lng.latitude, checkin_place.lat_lng.longitude),
         ).meters
         print(f"Distance: {distaces}")
-        if distaces > 30:
+        if distaces > 150:
             print("Distance is too far.")
             raise HTTPException(
                 status_code=400,

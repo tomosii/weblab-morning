@@ -73,7 +73,7 @@ Future<LocationDetail> getLocationDetail(
 
   late LocationStatus status;
 
-  if (minDistance > 30) {
+  if (minDistance > 150) {
     status = LocationStatus.outOfRange;
   } else {
     status = LocationStatus.withinRange;
