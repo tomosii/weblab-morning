@@ -40,6 +40,8 @@ Future<NetworkDetail> getNetworkDetail(
   );
 }
 
+const double kMinCheckinDistanceMeters = 150;
+
 Future<LocationDetail> getLocationDetail(
   Position? currentPosition,
   List<CheckInPlace> checkInPlaces,
@@ -73,7 +75,7 @@ Future<LocationDetail> getLocationDetail(
 
   late LocationStatus status;
 
-  if (minDistance > 30) {
+  if (minDistance > kMinCheckinDistanceMeters) {
     status = LocationStatus.outOfRange;
   } else {
     status = LocationStatus.withinRange;
